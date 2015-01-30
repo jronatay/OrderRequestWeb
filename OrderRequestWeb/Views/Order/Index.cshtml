@@ -1,0 +1,62 @@
+﻿
+@model List<EntityLibrary.OrderModels.OrderProductsInputModel>
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+   @using (Html.BeginForm("Index", "Order", FormMethod.Post))
+    {
+        @Html.ValidationSummary(true)
+<table>
+    <tr>
+        <th>
+            ProductName
+        </th>
+        <th>
+            Description
+        </th>
+        <th></th>
+    </tr>
+  
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                  <input type="hidden" name="Id" value="@item.Id" />
+                  <input type="hidden" name="ProductName" value="@item.ProductName" />
+                  <input type="hidden" name="Description" value="@item.Description" />
+                  <input type="number" step="1" name="Quantity" min="0" />
+                </td>
+            </tr>
+        }
+         <tr><td colspan="3">Others</td></tr>
+         <tr>
+                <td>
+                   <input type="text" name="ProductName" />
+                </td>
+                <td>
+                    <input type="text" name="Description" />
+                </td>
+                <td>
+                  <input type="hidden" name="Id" value="0" />
+                    <input type="number" step="1" name="Quantity" min="0"/>
+                </td>
+            </tr>
+         <tr><td><input type="submit" value="Order" /></td></tr>
+         
+    
+
+</table>
+    }

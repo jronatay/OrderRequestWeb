@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderRequestWeb", "OrderRequestWeb\OrderRequestWeb.csproj", "{B2F1CA62-F82F-4AAB-BD26-8CA7244F9A37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLogicLayer\BusinessLogic.csproj", "{C7F280DC-A9B0-4F82-A059-62C12AECEECC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityLibrary", "EntityLibrary\EntityLibrary.csproj", "{EAE89BE5-E353-4F71-935C-0D37C9146E28}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2F1CA62-F82F-4AAB-BD26-8CA7244F9A37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2F1CA62-F82F-4AAB-BD26-8CA7244F9A37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2F1CA62-F82F-4AAB-BD26-8CA7244F9A37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2F1CA62-F82F-4AAB-BD26-8CA7244F9A37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7F280DC-A9B0-4F82-A059-62C12AECEECC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7F280DC-A9B0-4F82-A059-62C12AECEECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7F280DC-A9B0-4F82-A059-62C12AECEECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7F280DC-A9B0-4F82-A059-62C12AECEECC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAE89BE5-E353-4F71-935C-0D37C9146E28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAE89BE5-E353-4F71-935C-0D37C9146E28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAE89BE5-E353-4F71-935C-0D37C9146E28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAE89BE5-E353-4F71-935C-0D37C9146E28}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
