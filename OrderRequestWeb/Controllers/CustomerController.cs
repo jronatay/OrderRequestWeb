@@ -15,18 +15,23 @@ namespace OrderRequestWeb.Controllers
         // GET: /Customer/
        
         private BusinessLogicLayer.CustomerService CustomerService = new CustomerService();
+        private OrderRequestWeb.Models.CustomerModel.CountryViewModel Country = new Models.CustomerModel.CountryViewModel();
         
-        public ActionResult Index()
-        {
-            return View();
-        }
+      
+
         [AllowAnonymous]
 
         public ActionResult register()
         {
-            OrderRequestWeb.Models.CustomerModel.CountryViewModel Country = new Models.CustomerModel.CountryViewModel();
-            ViewData["Country"] = Country.LoadCountries();
-            return View();
+            if (Request.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Order");
+            }
+            else
+            {
+                ViewData["Country"] = Country.LoadCountries();
+                return View();
+            }
         }
 
         [AllowAnonymous]
@@ -36,35 +41,28 @@ namespace OrderRequestWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (CustomerService.IsCustomerDataValid(Customer))
+                if (CustomerService.IsEmailExixt(Customer))
                 {
-                    CustomerService.Save(Customer);
-                    return RedirectToAction("Index");
+                    ModelState.AddModelError("EmailAddress", "Email already exist!");
+
                 }
-                ModelState.AddModelError("", "Please check your email or other inputs");
-                          
+                else
+                {
+                    if (CustomerService.IsCustomerDataValid(Customer))
+                    {
+                        CustomerService.Save(Customer);
+                        return RedirectToAction("Index");
+                    }
+                    ModelState.AddModelError("", "Please put valid information");
+                }          
             }
+
             ModelState.AddModelError("","Please put valid information");
-            OrderRequestWeb.Models.CustomerModel.CountryViewModel Country = new Models.CustomerModel.CountryViewModel();
             ViewData["Country"] = Country.LoadCountries();
             return View(Customer);
         }
 
-        [Authorize]
-        public JsonResult IsEmailExist(string EmailAddress)
-        {
-           
-            if (CustomerService.IsEmailExixt(EmailAddress))
-            {
-                return Json("Sorry, this name already exists", JsonRequestBehavior.AllowGet);
-
-            }
-            else
-            {
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-
-        }
+        
         
 
 

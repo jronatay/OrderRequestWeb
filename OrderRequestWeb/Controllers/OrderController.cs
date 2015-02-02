@@ -10,6 +10,7 @@ using System.Web.Routing;
 
 namespace OrderRequestWeb.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         private BusinessLogicLayer.OrderService OrderService = new OrderService();
@@ -18,6 +19,7 @@ namespace OrderRequestWeb.Controllers
         
         public ActionResult Index()
         {
+            Session["model"] =" ";
             return View(OrderService.OrderProductInputList());
         }
         [HttpPost]
@@ -34,17 +36,21 @@ namespace OrderRequestWeb.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "At Least One Product with at least 1 Quantity needed to Process Order");
+                    ModelState.AddModelError("", "At least 1 Quantity  of product/products needed to process an order");
                     return View(OrderService.OrderProductInputList());
                 }
             }
+            ModelState.AddModelError("", "Plesase Enter a valid quantity!");
             return View(OrderService.OrderProductInputList());
         }
 
         public ActionResult OrderCheck()
         {
-            
-            return View( OrderService.ReturnOrderProductsStored(OrderService.PopulatedOrderProductFromRequest((EntityLibrary.OrderModels.OrderRequestInputModel)Session["model"])));
+            if (!Session["model"].Equals(null) || !Session["model"].Equals(" "))
+            {
+                return View(OrderService.ReturnOrderProductsStored(OrderService.PopulatedOrderProductFromRequest((EntityLibrary.OrderModels.OrderRequestInputModel)Session["model"])));
+            }
+            return RedirectToAction("Index");
         }
         public ActionResult OrderConfirmation()
         {
@@ -52,6 +58,14 @@ namespace OrderRequestWeb.Controllers
             OrderService.SaveOrder((EntityLibrary.OrderModels.OrderRequestInputModel)Session["model"], OrderNo);
 
             return View(OrderService.OrderConfirmation(OrderNo));
+        }
+        public ActionResult OrderOverView()
+        {
+            return View(OrderService.GetOrderByCustomerID(int.Parse(User.Identity.Name.Split(',')[1])));
+        }
+        public ActionResult OrderOverViewDetails(int id)
+        {
+            return View(OrderService.GetOrderProductsByOrderIdAndCustomerId(id,int.Parse(User.Identity.Name.Split(',')[1])));
         }
 
     }

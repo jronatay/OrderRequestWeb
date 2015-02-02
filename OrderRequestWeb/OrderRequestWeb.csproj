@@ -293,6 +293,8 @@
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Order\OrderCheck.cshtml" />
     <Content Include="Views\Order\OrderConfirmation.cshtml" />
+    <Content Include="Views\Order\OrderOverView.cshtml" />
+    <Content Include="Views\Order\OrderOverViewDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

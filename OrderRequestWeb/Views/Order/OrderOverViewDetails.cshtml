@@ -1,14 +1,15 @@
 ﻿@model IEnumerable<EntityLibrary.OrderModels.OrderProductsInputModel>
 
 @{
-    ViewBag.Title = "OrderCheck";
+    ViewBag.Title = "OrderOverViewDetails";
 }
 
-<h2>Order Check</h2>
+<h2>Order OverView Details</h2>
 
-
-
-    <table>
+<p>
+    @Html.ActionLink("Back", "Index")
+</p>
+<table>
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Quantity)
@@ -19,11 +20,10 @@
         <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
-        <th></th>
+        
     </tr>
 
-    @foreach (var item in Model)
-    {
+@foreach (var item in Model) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Quantity)
@@ -34,12 +34,8 @@
         <td>
             @Html.DisplayFor(modelItem => item.Description)
         </td>
-           
+       
     </tr>
-    }
-        @using (Html.BeginForm("OrderConfirmation", "Order"))
-        {
-        
-        <tr><td><input type="submit" value="Confirm Order" /></td></tr>
-        }
-    </table>
+}
+
+</table>

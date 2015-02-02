@@ -9,64 +9,26 @@ namespace EntityLibrary
 {
     public class OrderRepository
     {
-        private OrderRequestEntities db;
+        private OrderRequestEntities db = new OrderRequestEntities();
         private OrderProduct OrderProduct= new OrderProduct();
         private Order Order = new Order();
         private OrderItem OrderItem= new OrderItem();
-         public OrderRepository(OrderRequestEntities db)
-        {
-            this.db = db;
-            this.OrderProduct = new OrderProduct();
-        }
+
+       
         public List<OrderProduct> OrderProductList()
         {
             return db.OrderProducts.ToList();
         }
-        public List<OrderModels.OrderProductsInputModel> OrderProductInputList()
-        {
-            return PopulateOrderProductInputModel(OrderProductList());
-        }
-        public List<OrderModels.OrderProductsInputModel> PopulateOrderProductInputModel(List<OrderProduct> OrderProducts)
-        {
-            List<OrderModels.OrderProductsInputModel> OrderProductInputLists = new List<OrderModels.OrderProductsInputModel>();
-           
-            OrderProducts = OrderProductList();
-            foreach (var OrderProductsItem in OrderProducts)
-            {
-                OrderModels.OrderProductsInputModel OrderProductInputModel = new OrderModels.OrderProductsInputModel();
-                OrderProductInputModel.Id = OrderProductsItem.Id;
-                OrderProductInputModel.ProductName = OrderProductsItem.ProductName;
-                OrderProductInputModel.Description = OrderProductsItem.Description;
-                OrderProductInputModel.Quantity = 0;
-                OrderProductInputLists.Add(OrderProductInputModel);
-            }
-            return OrderProductInputLists;
-        }
-
-        public List<OrderModels.OrderProductsInputModel> PopulateModelFromRequest(OrderModels.OrderRequestInputModel OrderInputRequest)
-        {
-            List<OrderModels.OrderProductsInputModel> OrderProductsModel = new List<OrderModels.OrderProductsInputModel>();
-            for(int counter=0; counter<OrderInputRequest.Id.Count();counter++)
-            {
-                OrderModels.OrderProductsInputModel RequestedProduct = new OrderModels.OrderProductsInputModel();
-                RequestedProduct.Id=OrderInputRequest.Id[counter];
-                RequestedProduct.ProductName=OrderInputRequest.ProductName[counter];
-                RequestedProduct.Description=OrderInputRequest.Description[counter];
-                RequestedProduct.Quantity=OrderInputRequest.Quantity[counter];
-                OrderProductsModel.Add(RequestedProduct);
-               
-            }
-            return OrderProductsModel;
-            
-        }
+       
+        
+      
+       
 
         #region Add Order to Database 
 
         public int AddOrderRequestAndReturnGeneratedID(int CustomerId)
         {
-           
-          
-            Order.CreationDate = DateTime.Now.ToUniversalTime();
+           Order.CreationDate = DateTime.Now.ToUniversalTime();
             Order.CustomerId = CustomerId;
             db.Orders.Add(Order);
             db.SaveChanges();
@@ -75,9 +37,13 @@ namespace EntityLibrary
         }
         public void UpdateOrderNo(int OrderID)
         {
-            var result = db.Orders.Where(order => order.Id == OrderID).First();
-            result.OrderNo = OrderID;
+            Order = GetOrder(OrderID);
+            Order.OrderNo = OrderID;
             db.SaveChanges();
+        }
+        public Order GetOrder(int OrderID)
+        {
+            return db.Orders.Where(order => order.Id == OrderID).First();
         }
 
         
@@ -119,6 +85,42 @@ namespace EntityLibrary
         #endregion
 
 
+        public List<Order> GetOrderByCustomer(int CustomerId)
+        {
+            var result = db.Orders.Where(orders => orders.CustomerId == CustomerId).ToList();
+            return result;
+        }
+      
+        public List<OrderModels.OrderProductsInputModel> GetOrderDetails(int CustomerID, int OrderID)
+        {
+            var q = from o in db.Orders
+                    join oi in db.OrderItems
+                    on o.Id equals oi.OrderId
+                    join op in db.OrderProducts
+                    on oi.OrderProductID equals op.Id
+                    where o.CustomerId==CustomerID && o.Id==OrderID
+                    select new
+                    {
+                        ProductName = op.ProductName,
+                        Description = op.Description,
+                        Quantity = oi.Quantity,
+                        Id=op.Id
+                        
 
+                    };
+
+            List<OrderModels.OrderProductsInputModel> OrderProductsOverView = new List<OrderModels.OrderProductsInputModel>();
+            foreach (var Products in q)
+            {
+                OrderModels.OrderProductsInputModel viewmodel = new OrderModels.OrderProductsInputModel();
+                viewmodel.Id = Products.Id;
+                viewmodel.ProductName = Products.ProductName;
+                viewmodel.Description = Products.Description;
+                viewmodel.Quantity = Products.Quantity;
+                OrderProductsOverView.Add(viewmodel);
+            }
+            return OrderProductsOverView;
+
+        }
     }
 }

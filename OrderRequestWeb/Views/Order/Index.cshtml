@@ -5,12 +5,10 @@
 @{
     ViewBag.Title = "Index";
 }
+<p>Order Over View :  @Html.ActionLink("Order OverView", "OrderOverView")</p>
+<h2>New Order</h2>
 
-<h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
    @using (Html.BeginForm("Index", "Order", FormMethod.Post))
     {
         @Html.ValidationSummary(true)
@@ -22,9 +20,9 @@
         <th>
             Description
         </th>
-        <th></th>
+        <th> Quantity</th>
     </tr>
-  
+  <tbody>
         @foreach (var item in Model) {
             <tr>
                 <td>
@@ -44,16 +42,17 @@
          <tr><td colspan="3">Others</td></tr>
          <tr>
                 <td>
-                   <input type="text" name="ProductName" />
+                   <input type="text" name="ProductName" pattern="^[^<>]*$" />
                 </td>
                 <td>
-                    <input type="text" name="Description" />
+                    <input type="text" name="Description" pattern="^[^<>]*$" />
                 </td>
                 <td>
                   <input type="hidden" name="Id" value="0" />
                     <input type="number" step="1" name="Quantity" min="0"/>
                 </td>
             </tr>
+      </tbody>
          <tr><td><input type="submit" value="Order" /></td></tr>
          
     

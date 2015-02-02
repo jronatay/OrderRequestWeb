@@ -1,0 +1,43 @@
+﻿@model IEnumerable<EntityLibrary.Order>
+
+@{
+    ViewBag.Title = "OrderOverView";
+}
+
+<h2>OrderOverView</h2>
+
+<p>
+    @Html.ActionLink("Back", "Index")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderNo)
+        </th>
+      
+        <th>
+            @Html.DisplayNameFor(model => model.CreationDate)
+        </th>
+        
+        <th> Action</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderNo)
+        </td>
+     
+        <td>
+            @Html.DisplayFor(modelItem => item.CreationDate)
+        </td>
+        
+        <td>
+           
+           @Html.ActionLink("Details", "OrderOverViewDetails", new { id=item.Id }) 
+          
+        </td>
+    </tr>
+}
+
+</table>

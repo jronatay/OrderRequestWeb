@@ -49,7 +49,6 @@
     <Compile Include="Customer.cs">
       <DependentUpon>OrderRequest.tt</DependentUpon>
     </Compile>
-    <Compile Include="CustomerModels\UserLoginModel.cs" />
     <Compile Include="CustomerRepository.cs" />
     <Compile Include="CustomerModels\SignInInputModel.cs" />
     <Compile Include="Order.cs">

@@ -1,8 +1,6 @@
 ﻿using OrderRequestWeb.Filters;
 using System;
 using System.Collections.Generic;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -26,8 +24,15 @@ namespace OrderRequestWeb.Controllers
 
         public ActionResult Index(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
+            if (Request.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Order");
+            }
+            else
+            {
+                ViewBag.ReturnUrl = returnUrl;
+                return View();
+            }
             
         }
          [HttpPost]
@@ -35,21 +40,29 @@ namespace OrderRequestWeb.Controllers
          [ValidateAntiForgeryToken]
          public ActionResult Index(EntityLibrary.CustomerModels.SignInInputModel user)
          {
-            if (ModelState.IsValid && CustomerService.IsCustomerSignInExist(user))
+             try
              {
-               
-               
-                 FormsAuthentication.SetAuthCookie(CustomerService.LoggedInUser(user), false);
+                 if (ModelState.IsValid && CustomerService.IsCustomerSignInExist(user))
+                 {
 
-                 return RedirectToAction("Index", "Order");
+                     FormsAuthentication.SetAuthCookie(CustomerService.LoggedInUser(user), false);
+                     return RedirectToAction("Index", "Order");
 
+                 }
+                 ModelState.AddModelError("", "Email and Password Does not Match ! ");
+                 return View(user);
              }
-             return View(user);
+             catch
+             {
+                 ModelState.AddModelError("", "Email and Password Does not Match ! ");
+                 return View(user);
+             }
          }
          [Authorize]
          public ActionResult signout()
          {
              FormsAuthentication.SignOut();
+             Session.Clear();
              return RedirectToAction("Index", "Home");
 
          }

@@ -10,10 +10,11 @@ namespace BusinessLogicLayer
 {
     public class OrderService
     {
-        private EntityLibrary.OrderRepository OrderRepository = new OrderRepository(new OrderRequestEntities());
-        private List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderInput;
-        private EntityLibrary.Order Order;
-        private EntityLibrary.OrderItem OrderItem;
+        private EntityLibrary.OrderRepository OrderRepository = new OrderRepository();
+        private List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderInput = new List<EntityLibrary.OrderModels.OrderProductsInputModel>();
+        private EntityLibrary.Order Order = new EntityLibrary.Order();
+        private EntityLibrary.OrderItem OrderItem = new OrderItem();
+        private EntityLibrary.OrderModels.OrderProductsInputModel OrderProductInputModel = new EntityLibrary.OrderModels.OrderProductsInputModel();
         public IEnumerable<OrderProduct> OrderProductList()
         {
             return OrderRepository.OrderProductList();
@@ -21,7 +22,27 @@ namespace BusinessLogicLayer
 
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductInputList()
         {
-            return OrderRepository.OrderProductInputList();
+            return OrderProductInputLists();
+        }
+        public List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductInputLists()
+        {
+            return PopulateOrderProductInputModel(OrderRepository.OrderProductList());
+        }
+        public List<EntityLibrary.OrderModels.OrderProductsInputModel> PopulateOrderProductInputModel(List<OrderProduct> OrderProducts)
+        {
+            List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductInputLists = new List<EntityLibrary.OrderModels.OrderProductsInputModel>();
+
+            OrderProducts = OrderRepository.OrderProductList();
+            foreach (var OrderProductsItem in OrderProducts)
+            {
+                EntityLibrary.OrderModels.OrderProductsInputModel OrderProductInput = new EntityLibrary.OrderModels.OrderProductsInputModel();
+                OrderProductInput.Id = OrderProductsItem.Id;
+                OrderProductInput.ProductName = OrderProductsItem.ProductName;
+                OrderProductInput.Description = OrderProductsItem.Description;
+                OrderProductInput.Quantity = 0;
+                OrderProductInputLists.Add(OrderProductInput);
+            }
+            return OrderProductInputLists;
         }
 
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> PopulatedOrderProductFromRequest(EntityLibrary.OrderModels.OrderRequestInputModel OrderRequestModel)
@@ -29,20 +50,21 @@ namespace BusinessLogicLayer
             return PopulateModelFromRequest(OrderRequestModel);
         }
 
+    
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> PopulateModelFromRequest(EntityLibrary.OrderModels.OrderRequestInputModel OrderInputRequest)
         {
-            List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsModel = new List<EntityLibrary.OrderModels.OrderProductsInputModel>();
+           
             for (int counter = 0; counter < OrderInputRequest.Id.Count(); counter++)
             {
-                EntityLibrary.OrderModels.OrderProductsInputModel RequestedProduct = new EntityLibrary.OrderModels.OrderProductsInputModel();
-                RequestedProduct.Id = OrderInputRequest.Id[counter];
-                RequestedProduct.ProductName = OrderInputRequest.ProductName[counter];
-                RequestedProduct.Description = OrderInputRequest.Description[counter];
-                RequestedProduct.Quantity = OrderInputRequest.Quantity[counter];
-                OrderProductsModel.Add(RequestedProduct);
+                EntityLibrary.OrderModels.OrderProductsInputModel OrderProductInputModel = new EntityLibrary.OrderModels.OrderProductsInputModel();
+                OrderProductInputModel.Id = OrderInputRequest.Id[counter];
+                OrderProductInputModel.ProductName = OrderInputRequest.ProductName[counter];
+                OrderProductInputModel.Description = OrderInputRequest.Description[counter];
+                OrderProductInputModel.Quantity = OrderInputRequest.Quantity[counter];
+                OrderInput.Add(OrderProductInputModel);
 
             }
-            return OrderProductsModel;
+            return OrderInput;
 
         }
 
@@ -87,12 +109,12 @@ namespace BusinessLogicLayer
 
         public EntityLibrary.OrderModels.OrderProductsInputModel PopulateTemporaryStorage(EntityLibrary.OrderModels.OrderProductsInputModel OrderProductsRequestedInput)
         {
-            EntityLibrary.OrderModels.OrderProductsInputModel OrderProductsInput = new EntityLibrary.OrderModels.OrderProductsInputModel();
-            OrderProductsInput.Id = OrderProductsRequestedInput.Id;
-            OrderProductsInput.ProductName = OrderProductsRequestedInput.ProductName;
-            OrderProductsInput.Description = OrderProductsRequestedInput.Description;
-            OrderProductsInput.Quantity = OrderProductsRequestedInput.Quantity;
-            return OrderProductsInput;
+            
+            OrderProductInputModel.Id = OrderProductsRequestedInput.Id;
+            OrderProductInputModel.ProductName = OrderProductsRequestedInput.ProductName;
+            OrderProductInputModel.Description = OrderProductsRequestedInput.Description;
+            OrderProductInputModel.Quantity = OrderProductsRequestedInput.Quantity;
+            return OrderProductInputModel;
         }
 
         public Boolean IsRequestedStoredInTemporaryStorage(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
@@ -122,7 +144,7 @@ namespace BusinessLogicLayer
         }
         public Order PopulateOrder(int CustomerID)
         {
-            Order = new Order();
+           
             Order.CreationDate = DateTime.Now.ToUniversalTime();
             Order.CustomerId = CustomerID;
             return Order;
@@ -139,7 +161,7 @@ namespace BusinessLogicLayer
         public void SaveOrder(EntityLibrary.OrderModels.OrderRequestInputModel ConfirmedOrderRequest,int OrderNo)
         {
            
-            OrderInput = new List<EntityLibrary.OrderModels.OrderProductsInputModel>();
+           
             OrderInput = PopulatedOrderProductFromRequest(ConfirmedOrderRequest);
             foreach (var Product in OrderInput)
             {
@@ -164,7 +186,7 @@ namespace BusinessLogicLayer
         }
         public OrderItem AddOrderItems(EntityLibrary.OrderModels.OrderProductsInputModel OrderProducts,int OrderNo)
         {
-            OrderItem = new OrderItem();
+           
             OrderItem.Quantity = OrderProducts.Quantity;
             OrderItem.OrderProductID = OrderProducts.Id;
             OrderItem.OrderId = OrderNo;
@@ -172,7 +194,7 @@ namespace BusinessLogicLayer
         }
         public OrderItem AddOrderItemsOtherProducts(EntityLibrary.OrderModels.OrderProductsInputModel OrderProducts, int OrderNo,int OrderProductID)
         {
-            OrderItem = new OrderItem();
+           
             OrderItem.Quantity = OrderProducts.Quantity;
             OrderItem.OrderProductID = OrderProductID;
             OrderItem.OrderId = OrderNo;
@@ -184,6 +206,14 @@ namespace BusinessLogicLayer
         }
         #endregion
 
+        public List<EntityLibrary.Order> GetOrderByCustomerID(int CustomerId)
+        {
+            return OrderRepository.GetOrderByCustomer(CustomerId);
+        }
+        public List<EntityLibrary.OrderModels.OrderProductsInputModel> GetOrderProductsByOrderIdAndCustomerId(int OrderId,int CustomerId)
+        {
+            return OrderRepository.GetOrderDetails(CustomerId, OrderId);
+        }
 
 
     }
