@@ -57,7 +57,7 @@ namespace EntityLibrary
         [Display(Name = "City")]
         public string City { get; set; }
 
-        [StringLength(50, ErrorMessage = "The Region must be at least 5 to 50 characters long.", MinimumLength = 5)]
+        [StringLength(50, ErrorMessage = "The Region must be at least 5 to 50 characters long.", MinimumLength = 3)]
         [RegularExpression(@"^[^\d^`~!@#\$%\^&\*\(\)_\+=<>\?;:'\|/\[\]\{\}""]+[^\d^`~!@#\$%\^&\*\(\)_\+=<>\?;:\|/\[\]\{\}""]$", ErrorMessage = "Input valid characters")]
         [Display(Name = "Region - Optional")]
         public string Region { get; set; }

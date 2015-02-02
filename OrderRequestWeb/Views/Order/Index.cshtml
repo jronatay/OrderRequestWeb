@@ -5,7 +5,7 @@
 @{
     ViewBag.Title = "Index";
 }
-<p>Order Over View :  @Html.ActionLink("Order OverView", "OrderOverView")</p>
+<p>Order Over View :  @Html.ActionLink("Order Overview", "OrderOverView")</p>
 <h2>New Order</h2>
 
 
@@ -39,13 +39,13 @@
                 </td>
             </tr>
         }
-         <tr><td colspan="3">Others</td></tr>
+         <tr><td colspan="3" ><h3><strong>Others</strong></h3></td></tr>
          <tr>
                 <td>
                    <input type="text" name="ProductName" pattern="^[^<>]*$" />
                 </td>
                 <td>
-                    <input type="text" name="Description" pattern="^[^<>]*$" />
+                    <textarea  name="Description" pattern="^[^<>]*$" rows="5" cols="10"></textarea>
                 </td>
                 <td>
                   <input type="hidden" name="Id" value="0" />

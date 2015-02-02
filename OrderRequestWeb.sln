@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityLibrary", "EntityLibrary\EntityLibrary.csproj", "{EAE89BE5-E353-4F71-935C-0D37C9146E28}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "UnitTestProject1\UnitTestProject1.csproj", "{352E4911-FA62-455E-BDC3-7C8A97E35145}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{EAE89BE5-E353-4F71-935C-0D37C9146E28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAE89BE5-E353-4F71-935C-0D37C9146E28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAE89BE5-E353-4F71-935C-0D37C9146E28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{352E4911-FA62-455E-BDC3-7C8A97E35145}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{352E4911-FA62-455E-BDC3-7C8A97E35145}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{352E4911-FA62-455E-BDC3-7C8A97E35145}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{352E4911-FA62-455E-BDC3-7C8A97E35145}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

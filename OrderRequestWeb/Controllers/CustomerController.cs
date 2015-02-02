@@ -39,27 +39,37 @@ namespace OrderRequestWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult register(EntityLibrary.Customer Customer)
         {
-            if (ModelState.IsValid)
+            try
             {
-                if (CustomerService.IsEmailExixt(Customer))
+                if (ModelState.IsValid)
                 {
-                    ModelState.AddModelError("EmailAddress", "Email already exist!");
+                    if (CustomerService.IsEmailExixt(Customer))
+                    {
+                        ModelState.AddModelError("EmailAddress", "Email already exist!");
+
+                    }
+                    else
+                    {
+                        if (CustomerService.IsCustomerDataValid(Customer))
+                        {
+                            CustomerService.Save(Customer);
+                            return RedirectToAction("register");
+                        }
+                        ModelState.AddModelError("", "Please put valid information");
+                    }
 
                 }
-                else
-                {
-                    if (CustomerService.IsCustomerDataValid(Customer))
-                    {
-                        CustomerService.Save(Customer);
-                        return RedirectToAction("Index");
-                    }
-                    ModelState.AddModelError("", "Please put valid information");
-                }          
-            }
 
-            ModelState.AddModelError("","Please put valid information");
-            ViewData["Country"] = Country.LoadCountries();
-            return View(Customer);
+                ModelState.AddModelError("", "Please put valid information");
+                ViewData["Country"] = Country.LoadCountries();
+                return View(Customer);
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", "Please put valid information");
+                ViewData["Country"] = Country.LoadCountries();
+                return View(Customer);
+            }
         }
 
         

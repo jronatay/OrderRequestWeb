@@ -15,6 +15,9 @@ namespace BusinessLogicLayer
         private EntityLibrary.Order Order = new EntityLibrary.Order();
         private EntityLibrary.OrderItem OrderItem = new OrderItem();
         private EntityLibrary.OrderModels.OrderProductsInputModel OrderProductInputModel = new EntityLibrary.OrderModels.OrderProductsInputModel();
+        
+        
+        
         public IEnumerable<OrderProduct> OrderProductList()
         {
             return OrderRepository.OrderProductList();
@@ -22,15 +25,12 @@ namespace BusinessLogicLayer
 
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductInputList()
         {
-            return OrderProductInputLists();
-        }
-        public List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductInputLists()
-        {
             return PopulateOrderProductInputModel(OrderRepository.OrderProductList());
         }
+
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> PopulateOrderProductInputModel(List<OrderProduct> OrderProducts)
         {
-            List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductInputLists = new List<EntityLibrary.OrderModels.OrderProductsInputModel>();
+            
 
             OrderProducts = OrderRepository.OrderProductList();
             foreach (var OrderProductsItem in OrderProducts)
@@ -40,9 +40,9 @@ namespace BusinessLogicLayer
                 OrderProductInput.ProductName = OrderProductsItem.ProductName;
                 OrderProductInput.Description = OrderProductsItem.Description;
                 OrderProductInput.Quantity = 0;
-                OrderProductInputLists.Add(OrderProductInput);
+                OrderInput.Add(OrderProductInput);
             }
-            return OrderProductInputLists;
+            return OrderInput;
         }
 
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> PopulatedOrderProductFromRequest(EntityLibrary.OrderModels.OrderRequestInputModel OrderRequestModel)
@@ -50,37 +50,35 @@ namespace BusinessLogicLayer
             return PopulateModelFromRequest(OrderRequestModel);
         }
 
-    
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> PopulateModelFromRequest(EntityLibrary.OrderModels.OrderRequestInputModel OrderInputRequest)
         {
-           
             for (int counter = 0; counter < OrderInputRequest.Id.Count(); counter++)
             {
-                EntityLibrary.OrderModels.OrderProductsInputModel OrderProductInputModel = new EntityLibrary.OrderModels.OrderProductsInputModel();
-                OrderProductInputModel.Id = OrderInputRequest.Id[counter];
-                OrderProductInputModel.ProductName = OrderInputRequest.ProductName[counter];
-                OrderProductInputModel.Description = OrderInputRequest.Description[counter];
-                OrderProductInputModel.Quantity = OrderInputRequest.Quantity[counter];
-                OrderInput.Add(OrderProductInputModel);
+
+                if (OrderInputRequest.ProductName[counter] != null && OrderInputRequest.ProductName[counter].Trim() != "" && 
+                    OrderInputRequest.Description[counter] != null && OrderInputRequest.Description[counter].Trim() != "")
+                {
+                    EntityLibrary.OrderModels.OrderProductsInputModel OrderProductInputModel = new EntityLibrary.OrderModels.OrderProductsInputModel();
+                    OrderProductInputModel.Id = OrderInputRequest.Id[counter];
+                    OrderProductInputModel.ProductName = OrderInputRequest.ProductName[counter];
+                    OrderProductInputModel.Description = OrderInputRequest.Description[counter];
+                    OrderProductInputModel.Quantity = OrderInputRequest.Quantity[counter];
+                    OrderInput.Add(OrderProductInputModel);
+                }
 
             }
             return OrderInput;
 
         }
 
-        public Boolean ValidateOrderRequestedInputs(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
-        {
-            return true;
-        }
-
-        public Boolean IsThereAtleastOneOrder(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
+        public bool IsThereAtleastOneOrder(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
         {
             foreach (var Item in OrderProductsInput)
             {
                 if (Item.Quantity > 0)
                 {
-                    return true;
-                }
+                   return true;
+                 }
             }
             return false;
         }
@@ -99,9 +97,9 @@ namespace BusinessLogicLayer
             List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsTemporaryStorage = new List<EntityLibrary.OrderModels.OrderProductsInputModel>();
             foreach (var Item in OrderProductsRequestedInput)
             {
-                if (Item.Quantity > 0)
+                if (Item.Quantity > 0 )
                 {
-                    OrderProductsTemporaryStorage.Add(PopulateTemporaryStorage(Item));
+                    OrderProductsTemporaryStorage.Add(Item);
                 }
             }
             return OrderProductsTemporaryStorage;
@@ -109,7 +107,6 @@ namespace BusinessLogicLayer
 
         public EntityLibrary.OrderModels.OrderProductsInputModel PopulateTemporaryStorage(EntityLibrary.OrderModels.OrderProductsInputModel OrderProductsRequestedInput)
         {
-            
             OrderProductInputModel.Id = OrderProductsRequestedInput.Id;
             OrderProductInputModel.ProductName = OrderProductsRequestedInput.ProductName;
             OrderProductInputModel.Description = OrderProductsRequestedInput.Description;
@@ -117,12 +114,11 @@ namespace BusinessLogicLayer
             return OrderProductInputModel;
         }
 
-        public Boolean IsRequestedStoredInTemporaryStorage(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
+        public bool IsRequestedStoredInTemporaryStorage(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
         {
             return ReturnStoredOrderProducts(OrderProductsInput) != null;
         }
 
-       
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> ReturnOrderProductsStored(List<EntityLibrary.OrderModels.OrderProductsInputModel> StoredOrderProducts)
         {
             if (IsRequestedStoredInTemporaryStorage(StoredOrderProducts))
@@ -132,32 +128,27 @@ namespace BusinessLogicLayer
             return null;
         }
 
-        public Boolean IsConfirmedOrderRequestNull(EntityLibrary.OrderModels.OrderRequestInputModel ConfirmedOrderRequest)
+        public bool IsConfirmedOrderRequestNull(EntityLibrary.OrderModels.OrderRequestInputModel ConfirmedOrderRequest)
         {
             return ConfirmedOrderRequest == null;
         }
 
-       
-        public Boolean IsOrderCreatedInDatabase()
-        {
-            return true;
-        }
         public Order PopulateOrder(int CustomerID)
         {
-           
-            Order.CreationDate = DateTime.Now.ToUniversalTime();
+            Order.CreationDate = DateTime.Now.ToLocalTime();
             Order.CustomerId = CustomerID;
             return Order;
         }
+
         public int NewOrder(int CustomerID)
         {
-           
             int OrderNo = OrderRepository.AddOrderRequestAndReturnGeneratedID(CustomerID);
             OrderRepository.UpdateOrderNo(OrderNo);
             return OrderNo;
         }
 
         #region OrderItems
+       
         public void SaveOrder(EntityLibrary.OrderModels.OrderRequestInputModel ConfirmedOrderRequest,int OrderNo)
         {
            
@@ -176,14 +167,17 @@ namespace BusinessLogicLayer
                 }
             }
         }
-        public Boolean IsConfirmedOrderProductOthers(int Id)
+       
+        public bool IsConfirmedOrderProductOthers(int Id)
         {
             return Id == 0;
         }
-        public Boolean IsConfirmedOrderProductOthersZeroQuantity(int Quantity)
+        
+        public bool IsConfirmedOrderProductOthersZeroQuantity(int Quantity)
         {
             return Quantity == 0;
         }
+        
         public OrderItem AddOrderItems(EntityLibrary.OrderModels.OrderProductsInputModel OrderProducts,int OrderNo)
         {
            
@@ -192,6 +186,7 @@ namespace BusinessLogicLayer
             OrderItem.OrderId = OrderNo;
             return OrderItem;
         }
+        
         public OrderItem AddOrderItemsOtherProducts(EntityLibrary.OrderModels.OrderProductsInputModel OrderProducts, int OrderNo,int OrderProductID)
         {
            
@@ -200,16 +195,19 @@ namespace BusinessLogicLayer
             OrderItem.OrderId = OrderNo;
             return OrderItem;
         }
+        
         public Order OrderConfirmation(int OrderNo)
         {
             return OrderRepository.OrderConfirmation(OrderNo);
         }
+        
         #endregion
 
         public List<EntityLibrary.Order> GetOrderByCustomerID(int CustomerId)
         {
             return OrderRepository.GetOrderByCustomer(CustomerId);
         }
+
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> GetOrderProductsByOrderIdAndCustomerId(int OrderId,int CustomerId)
         {
             return OrderRepository.GetOrderDetails(CustomerId, OrderId);

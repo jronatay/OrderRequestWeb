@@ -17,22 +17,22 @@ namespace EntityLibrary
 
         public void Save(Customer customer)
         {
-
-            db.Customers.Add((Customer)customer);
+            db.Customers.Add(customer);
             db.SaveChanges();
         }
 
-        public Boolean IsEmailExist(string EmailAddress)
+        public bool IsEmailExist(string EmailAddress)
         {
             var result = db.Customers.Where(customer => customer.EmailAddress == EmailAddress).ToList();
             return result.Count > 0;
         }
 
-        public Boolean IsCustomerSignInExist(SignInInputModel CustomerSignInInput)
+        public bool IsCustomerSignInExist(SignInInputModel CustomerSignInInput)
         {
             var result = db.Customers.Where(customer => customer.EmailAddress == CustomerSignInInput.EmailAddress && customer.Password == CustomerSignInInput.Password).ToList();
             return result.Count > 0;
         }
+
         public Customer CustomerLoggingIn(SignInInputModel CustomerSignInInput)
         {
             var result = db.Customers.Where(customer => customer.EmailAddress == CustomerSignInInput.EmailAddress && customer.Password == CustomerSignInInput.Password).First();

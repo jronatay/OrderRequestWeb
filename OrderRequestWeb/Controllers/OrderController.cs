@@ -22,6 +22,7 @@ namespace OrderRequestWeb.Controllers
             Session["model"] =" ";
             return View(OrderService.OrderProductInputList());
         }
+
         [HttpPost]
         public ActionResult Index(EntityLibrary.OrderModels.OrderRequestInputModel model)
         {
@@ -46,23 +47,25 @@ namespace OrderRequestWeb.Controllers
 
         public ActionResult OrderCheck()
         {
-            if (!Session["model"].Equals(null) || !Session["model"].Equals(" "))
+            if (Session["model"] !=null || Session["model"] !="")
             {
                 return View(OrderService.ReturnOrderProductsStored(OrderService.PopulatedOrderProductFromRequest((EntityLibrary.OrderModels.OrderRequestInputModel)Session["model"])));
             }
             return RedirectToAction("Index");
         }
+
         public ActionResult OrderConfirmation()
         {
             int OrderNo=OrderService.NewOrder(int.Parse(User.Identity.Name.Split(',')[1]));
             OrderService.SaveOrder((EntityLibrary.OrderModels.OrderRequestInputModel)Session["model"], OrderNo);
-
             return View(OrderService.OrderConfirmation(OrderNo));
         }
+        
         public ActionResult OrderOverView()
         {
             return View(OrderService.GetOrderByCustomerID(int.Parse(User.Identity.Name.Split(',')[1])));
         }
+        
         public ActionResult OrderOverViewDetails(int id)
         {
             return View(OrderService.GetOrderProductsByOrderIdAndCustomerId(id,int.Parse(User.Identity.Name.Split(',')[1])));

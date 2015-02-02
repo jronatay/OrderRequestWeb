@@ -11,7 +11,7 @@ namespace OrderRequestWeb.Models.CustomerModel
         public List<SelectListItem> LoadCountries()
         {
             List<SelectListItem> Countries = new List<SelectListItem>();
-            Countries.Add(new SelectListItem { Text = "Select", Value = "0" });
+            
             Countries.Add(new SelectListItem { Text = "Afghanistan", Value = "Afghanistan" });
             Countries.Add(new SelectListItem { Text = "Åland Islands", Value = "Åland Islands" });
             Countries.Add(new SelectListItem { Text = "Albania", Value = "Albania" });
@@ -157,7 +157,7 @@ namespace OrderRequestWeb.Models.CustomerModel
             Countries.Add(new SelectListItem { Text = "Papua New Guinea", Value = "Papua New Guinea" });
             Countries.Add(new SelectListItem { Text = "Paraguay", Value = "Paraguay" });
             Countries.Add(new SelectListItem { Text = "Peru", Value = "Peru" });
-            Countries.Add(new SelectListItem { Text = "Philippines", Value = "PH" });
+            Countries.Add(new SelectListItem { Text = "Philippines", Value = "Philippines" });
             Countries.Add(new SelectListItem { Text = "Pitcairn", Value = "Pitcairn" });
             Countries.Add(new SelectListItem { Text = "Poland", Value = "Poland" });
             Countries.Add(new SelectListItem { Text = "Portugal", Value = "Portugal" });

@@ -20,15 +20,11 @@ namespace EntityLibrary
             return db.OrderProducts.ToList();
         }
        
-        
-      
-       
-
         #region Add Order to Database 
 
         public int AddOrderRequestAndReturnGeneratedID(int CustomerId)
         {
-           Order.CreationDate = DateTime.Now.ToUniversalTime();
+            Order.CreationDate = DateTime.Now.ToLocalTime();
             Order.CustomerId = CustomerId;
             db.Orders.Add(Order);
             db.SaveChanges();
@@ -41,6 +37,7 @@ namespace EntityLibrary
             Order.OrderNo = OrderID;
             db.SaveChanges();
         }
+        
         public Order GetOrder(int OrderID)
         {
             return db.Orders.Where(order => order.Id == OrderID).First();
@@ -50,13 +47,12 @@ namespace EntityLibrary
 
         public int AddOtherProductAndReturnGeneratedID(OrderModels.OrderProductsInputModel OtherRequestProduct)
         {
-            
             AddOtherProduct(OtherRequestProduct);
             return OrderProduct.Id;
         }
+       
         public void AddOtherProduct(OrderModels.OrderProductsInputModel OtherRequestProduct)
         {
-           
             OrderProduct = PopulateOrderProductByRequestProduct(OtherRequestProduct);
             db.OrderProducts.Add(OrderProduct);
             db.SaveChanges();
@@ -64,7 +60,6 @@ namespace EntityLibrary
 
         public OrderProduct PopulateOrderProductByRequestProduct(OrderModels.OrderProductsInputModel OtherRequestProduct)
         {
-            
             OrderProduct.ProductName = OtherRequestProduct.ProductName;
             OrderProduct.Description = OtherRequestProduct.Description;
             return OrderProduct;
@@ -76,6 +71,7 @@ namespace EntityLibrary
             db.OrderItems.Add(OrderItem);
             db.SaveChanges();
         }
+        
         public Order OrderConfirmation(int OrderNo)
         {
             var result = db.Orders.Where(Order => Order.Id == OrderNo).First();
@@ -93,7 +89,7 @@ namespace EntityLibrary
       
         public List<OrderModels.OrderProductsInputModel> GetOrderDetails(int CustomerID, int OrderID)
         {
-            var q = from o in db.Orders
+            var result = from o in db.Orders
                     join oi in db.OrderItems
                     on o.Id equals oi.OrderId
                     join op in db.OrderProducts
@@ -110,7 +106,7 @@ namespace EntityLibrary
                     };
 
             List<OrderModels.OrderProductsInputModel> OrderProductsOverView = new List<OrderModels.OrderProductsInputModel>();
-            foreach (var Products in q)
+            foreach (var Products in result)
             {
                 OrderModels.OrderProductsInputModel viewmodel = new OrderModels.OrderProductsInputModel();
                 viewmodel.Id = Products.Id;
