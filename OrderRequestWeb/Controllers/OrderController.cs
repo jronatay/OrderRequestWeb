@@ -47,7 +47,7 @@ namespace OrderRequestWeb.Controllers
 
         public ActionResult OrderCheck()
         {
-            if (Session["model"] !=null || Session["model"] !="")
+            if (Session["model"] !=null)
             {
                 return View(OrderService.ReturnOrderProductsStored(OrderService.PopulatedOrderProductFromRequest((EntityLibrary.OrderModels.OrderRequestInputModel)Session["model"])));
             }

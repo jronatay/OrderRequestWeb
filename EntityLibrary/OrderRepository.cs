@@ -47,16 +47,14 @@ namespace EntityLibrary
 
         public int AddOtherProductAndReturnGeneratedID(OrderModels.OrderProductsInputModel OtherRequestProduct)
         {
-            AddOtherProduct(OtherRequestProduct);
-            return OrderProduct.Id;
-        }
-       
-        public void AddOtherProduct(OrderModels.OrderProductsInputModel OtherRequestProduct)
-        {
             OrderProduct = PopulateOrderProductByRequestProduct(OtherRequestProduct);
             db.OrderProducts.Add(OrderProduct);
             db.SaveChanges();
+           
+            return OrderProduct.Id;
         }
+       
+      
 
         public OrderProduct PopulateOrderProductByRequestProduct(OrderModels.OrderProductsInputModel OtherRequestProduct)
         {
