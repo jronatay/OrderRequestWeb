@@ -1,7 +1,7 @@
 ﻿  @using (Html.BeginForm("Index", "Order", FormMethod.Post))
 {
       @Html.ValidationSummary(true)
-    <table id="productlist" class="prodlist-table">
+    <table id="productlist" >
 
        <thead>
         <tr>
@@ -10,7 +10,7 @@
             <th> Quantity </th>
         </tr>
     </thead>
-        <tbody id="table-rows">
+        <tbody id="table-rows" class="prodlist-table">
 
         </tbody>
 

@@ -19,11 +19,15 @@
 
 <script>
 
-    
+
+    $('#table-rows').on('click', 'input[type="button"]', function (e) {
+       
+        $(this).closest('tr').remove();
+    });
     $('#productselectform').submit(function (e) {
         e.preventDefault();
         var ProdId = $("#countryselection").val();
-         if (ProdId != 0) {
+        if (ProdId != 0) {
             var json_strng2 = JSON.stringify({ Id: ProdId });
             $.ajax({
                 url: $("#productselectform").attr("action"),
@@ -53,10 +57,7 @@
         }
          
         });
-    
-    $('#table-rows').on('click','input[type="button"]', function (e) {
-        $(this).closest('tr').remove();
-    });
+  
     
    
    

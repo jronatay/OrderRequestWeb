@@ -72,23 +72,26 @@ namespace BusinessLogicLayer
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> PopulateModelFromRequest(EntityLibrary.OrderModels.OrderRequestInputModel OrderInputRequest)
         {
             List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderInput = new List<EntityLibrary.OrderModels.OrderProductsInputModel>();
-            for (int counter = 0; counter < OrderInputRequest.Id.Count(); counter++)
+            if (OrderInputRequest.Id != null)
             {
-
-                if (OrderInputRequest.ProductName[counter] != null && OrderInputRequest.ProductName[counter].Trim() != "" && 
-                    OrderInputRequest.Description[counter] != null && OrderInputRequest.Description[counter].Trim() != "")
+                for (int counter = 0; counter < OrderInputRequest.Id.Count(); counter++)
                 {
-                    EntityLibrary.OrderModels.OrderProductsInputModel OrderProductInputModel = new EntityLibrary.OrderModels.OrderProductsInputModel();
-                    OrderProductInputModel.Id = OrderInputRequest.Id[counter];
-                    OrderProductInputModel.ProductName = OrderInputRequest.ProductName[counter];
-                    OrderProductInputModel.Description = OrderInputRequest.Description[counter];
-                    OrderProductInputModel.Quantity = OrderInputRequest.Quantity[counter];
-                    OrderInput.Add(OrderProductInputModel);
-                }
 
+                    if (OrderInputRequest.ProductName[counter] != null && OrderInputRequest.ProductName[counter].Trim() != "" &&
+                        OrderInputRequest.Description[counter] != null && OrderInputRequest.Description[counter].Trim() != "")
+                    {
+                        EntityLibrary.OrderModels.OrderProductsInputModel OrderProductInputModel = new EntityLibrary.OrderModels.OrderProductsInputModel();
+                        OrderProductInputModel.Id = OrderInputRequest.Id[counter];
+                        OrderProductInputModel.ProductName = OrderInputRequest.ProductName[counter];
+                        OrderProductInputModel.Description = OrderInputRequest.Description[counter];
+                        OrderProductInputModel.Quantity = OrderInputRequest.Quantity[counter];
+                        OrderInput.Add(OrderProductInputModel);
+                    }
+
+                }
+                return OrderInput;
             }
             return OrderInput;
-
         }
 
         public bool IsThereAtleastOneOrder(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
