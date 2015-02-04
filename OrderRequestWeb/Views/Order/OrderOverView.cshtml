@@ -3,13 +3,13 @@
 @{
     ViewBag.Title = "OrderOverView";
 }
-
-<h2>Order Overview</h2>
+<div class="center">
+<h2 class="headertitle">Order Overview</h2>
 
 <p>
     @Html.ActionLink("Back", "Index")
 </p>
-<table>
+<table class="center-table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.OrderNo)
@@ -24,7 +24,7 @@
 
 @foreach (var item in Model) {
     <tr>
-        <td>
+        <td class="orderno">
             @Html.DisplayFor(modelItem => item.OrderNo)
         </td>
      
@@ -32,7 +32,7 @@
             @Html.DisplayFor(modelItem => item.CreationDate)
         </td>
         
-        <td>
+        <td class="alizarincolor_details">
            
            @Html.ActionLink("Details", "OrderOverViewDetails", new { id=item.Id }) 
           
@@ -41,3 +41,4 @@
 }
 
 </table>
+</div>

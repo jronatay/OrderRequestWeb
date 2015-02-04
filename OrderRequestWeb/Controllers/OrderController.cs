@@ -20,7 +20,7 @@ namespace OrderRequestWeb.Controllers
         public ActionResult Index()
         {
             Session["model"] =" ";
-            return View(OrderService.OrderProductInputList());
+            return View();
         }
 
         [HttpPost]
@@ -38,11 +38,11 @@ namespace OrderRequestWeb.Controllers
                 else
                 {
                     ModelState.AddModelError("", "At least 1 Quantity  of product/products needed to process an order");
-                    return View(OrderService.OrderProductInputList());
+                    return View();
                 }
             }
             ModelState.AddModelError("", "Plesase Enter a valid quantity!");
-            return View(OrderService.OrderProductInputList());
+            return View();
         }
 
         public ActionResult OrderCheck()
@@ -60,7 +60,25 @@ namespace OrderRequestWeb.Controllers
             OrderService.SaveOrder((EntityLibrary.OrderModels.OrderRequestInputModel)Session["model"], OrderNo);
             return View(OrderService.OrderConfirmation(OrderNo));
         }
-        
+
+        public ActionResult GetList()
+        {
+            Session["productrequest"]="";
+            return PartialView();
+        }
+
+        public ActionResult getproducts()
+        {
+            return PartialView(OrderService.OrderProductList());
+        }
+        [HttpPost]
+        public JsonResult ProducttoList(string Id)
+        {
+            var result = OrderService.getProductData(int.Parse(Id));
+            return Json(result);
+        }
+
+       
         public ActionResult OrderOverView()
         {
             return View(OrderService.GetOrderByCustomerID(int.Parse(User.Identity.Name.Split(',')[1])));

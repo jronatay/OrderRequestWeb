@@ -1,0 +1,19 @@
+﻿  @using (Html.BeginForm("Index", "Order", FormMethod.Post))
+{
+      @Html.ValidationSummary(true)
+    <table id="productlist" class="prodlist-table">
+
+       <thead>
+        <tr>
+            <th> Product Name </th>
+            <th> Description </th>
+            <th> Quantity </th>
+        </tr>
+    </thead>
+        <tbody id="table-rows">
+
+        </tbody>
+
+      </table>
+      <input type="submit" value="Submit Order" />
+  }

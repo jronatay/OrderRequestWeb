@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EntityLibrary
 {
-    public class OrderRepository
+    public class OrderDAO
     {
         private OrderRequestEntities db = new OrderRequestEntities();
         private OrderProduct OrderProduct= new OrderProduct();
@@ -19,9 +19,10 @@ namespace EntityLibrary
         {
             return db.OrderProducts.ToList();
         }
-       
+        
         #region Add Order to Database 
 
+        //OrderService dapat to
         public int AddOrderRequestAndReturnGeneratedID(int CustomerId)
         {
             Order.CreationDate = DateTime.Now.ToLocalTime();
@@ -54,8 +55,6 @@ namespace EntityLibrary
             return OrderProduct.Id;
         }
        
-      
-
         public OrderProduct PopulateOrderProductByRequestProduct(OrderModels.OrderProductsInputModel OtherRequestProduct)
         {
             OrderProduct.ProductName = OtherRequestProduct.ProductName;

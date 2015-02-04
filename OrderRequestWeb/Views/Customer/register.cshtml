@@ -3,8 +3,11 @@
 @{
     ViewBag.Title = "register";
 }
-
-<h2>register</h2>
+<div>
+    @Html.ActionLink("Home", "Index","Home")
+</div>
+<div class="center-block">
+<h2 class="headertitle">Registration</h2>
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
@@ -73,7 +76,7 @@
             @Html.LabelFor(model => model.Country)
         </div>
         <div class="editor-field">
-            @Html.DropDownList("Country", ViewData["Country"] as List<SelectListItem>)
+            @Html.DropDownList("Country", ViewData["Country"] as List<SelectListItem>, new {id="countryselection"})
             @Html.ValidationMessageFor(model => model.Country)
         </div>
 
@@ -100,10 +103,8 @@
         </p>
     </fieldset>
 }
-
-<div>
-    @Html.ActionLink("Home", "Index","Home")
 </div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

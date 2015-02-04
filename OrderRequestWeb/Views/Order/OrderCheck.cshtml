@@ -40,6 +40,9 @@
         @using (Html.BeginForm("OrderConfirmation", "Order"))
         {
         
-        <tr><td><input type="submit" value="Confirm Order" /></td></tr>
+        <tr>
+            <td><input type="submit" value="Confirm Order" /></td>
+            <td>@Html.ActionLink("Back", "Index")</td>
+        </tr>
         }
     </table>

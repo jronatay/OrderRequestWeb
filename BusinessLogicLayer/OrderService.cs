@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using System.Web;
 using EntityLibrary;
 
+
 namespace BusinessLogicLayer
 {
     public class OrderService
     {
-        private EntityLibrary.OrderRepository OrderRepository = new OrderRepository();
-        //private List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderInput = new List<EntityLibrary.OrderModels.OrderProductsInputModel>();
+        private OrderRequestEntities db = new OrderRequestEntities();
+        private EntityLibrary.OrderDAO OrderRepository = new OrderDAO();
+       
         private EntityLibrary.Order Order = new EntityLibrary.Order();
         private EntityLibrary.OrderItem OrderItem = new OrderItem();
         private EntityLibrary.OrderModels.OrderProductsInputModel OrderProductInputModel = new EntityLibrary.OrderModels.OrderProductsInputModel();
@@ -23,6 +25,23 @@ namespace BusinessLogicLayer
             return OrderRepository.OrderProductList();
         }
 
+        public object getProductData(int Id)
+        {
+            OrderProductInputModel = getOrderProduct(Id);
+            return new { Id=OrderProductInputModel.Id,
+                         ProductName=OrderProductInputModel.ProductName,
+                         Description = OrderProductInputModel.Description};
+        }
+        public EntityLibrary.OrderModels.OrderProductsInputModel getOrderProduct(int Id)
+        {
+            var result = db.OrderProducts.Where(product => product.Id == Id).First();
+
+            OrderProductInputModel.Id = result.Id;
+            OrderProductInputModel.ProductName = result.ProductName;
+            OrderProductInputModel.Description = result.Description;
+            return OrderProductInputModel;
+        }
+       
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductInputList()
         {
             return PopulateOrderProductInputModel(OrderRepository.OrderProductList());
@@ -193,7 +212,7 @@ namespace BusinessLogicLayer
         }
         
         #endregion
-
+         
         public List<EntityLibrary.Order> GetOrderByCustomerID(int CustomerId)
         {
             return OrderRepository.GetOrderByCustomer(CustomerId);

@@ -24,5 +24,13 @@ namespace OrderRequestWeb
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
         }
+        protected void Application_Error()
+        {
+            Exception lastError = Server.GetLastError();
+            if (lastError is HttpRequestValidationException)
+            {
+                 
+            }
+        }
     }
 }

@@ -4,20 +4,20 @@
     ViewBag.Title = "OrderOverViewDetails";
 }
 
-<h2>Order OverView Details</h2>
+<h2 class="headertitle">Order OverView Details</h2>
 
 <p>
     @Html.ActionLink("Back", "OrderOverView")
 </p>
-<table>
+<table class="center_table">
     <tr>
-        <th>
+        <th class="Quantity">
             @Html.DisplayNameFor(model => model.Quantity)
         </th>
-        <th>
+        <th  class="ProductName">
             @Html.DisplayNameFor(model => model.ProductName)
         </th>
-        <th>
+        <th  class="Description">
             @Html.DisplayNameFor(model => model.Description)
         </th>
         
@@ -25,13 +25,13 @@
 
 @foreach (var item in Model) {
     <tr>
-        <td>
+        <td class="Quantity ">
             @Html.DisplayFor(modelItem => item.Quantity)
         </td>
-        <td>
+        <td class="ProductName ">
             @Html.DisplayFor(modelItem => item.ProductName)
         </td>
-        <td>
+        <td class="Description ">
             @Html.DisplayFor(modelItem => item.Description)
         </td>
        

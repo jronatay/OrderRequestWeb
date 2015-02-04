@@ -295,6 +295,8 @@
     <Content Include="Views\Order\OrderConfirmation.cshtml" />
     <Content Include="Views\Order\OrderOverView.cshtml" />
     <Content Include="Views\Order\OrderOverViewDetails.cshtml" />
+    <Content Include="Views\Order\getproducts.cshtml" />
+    <Content Include="Views\Order\GetList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

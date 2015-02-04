@@ -49,7 +49,7 @@
     <Compile Include="Customer.cs">
       <DependentUpon>OrderRequest.tt</DependentUpon>
     </Compile>
-    <Compile Include="CustomerRepository.cs" />
+    <Compile Include="CustomerDAO.cs" />
     <Compile Include="CustomerModels\SignInInputModel.cs" />
     <Compile Include="Order.cs">
       <DependentUpon>OrderRequest.tt</DependentUpon>
@@ -62,7 +62,7 @@
     <Compile Include="OrderProduct.cs">
       <DependentUpon>OrderRequest.tt</DependentUpon>
     </Compile>
-    <Compile Include="OrderRepository.cs" />
+    <Compile Include="OrderDAO.cs" />
     <Compile Include="OrderRequest.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

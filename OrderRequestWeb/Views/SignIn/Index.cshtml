@@ -4,9 +4,9 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+
 <div class="signin-block">
-<h2 class="headings">Sign In</h2>
+<h2 class="headertitle">Sign In</h2>
 <div class="signin">
 @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }))
 {   @Html.AntiForgeryToken()
@@ -27,7 +27,7 @@
  @Html.ValidationMessageFor(m => m.Password)
 </div>
 <p>
- <input type="submit" value="Log In" />
+ <input class="belize" type="submit" value="Log In" />
 </p>
 </div>
 } 

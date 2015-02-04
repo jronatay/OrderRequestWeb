@@ -16,8 +16,8 @@ namespace BusinessLogicLayer
     public class CustomerService
     {
         
-        private EntityLibrary.CustomerRepository CustomerRepository = new CustomerRepository(new OrderRequestEntities());
-        
+        private EntityLibrary.CustomerDAO CustomerRepository = new CustomerDAO(new OrderRequestEntities());
+        private OrderRequestEntities db = new OrderRequestEntities();
         public void Save(Customer customer)
         {
             SetCustomerRegistrationDate(customer); 
@@ -65,12 +65,16 @@ namespace BusinessLogicLayer
 
         public bool IsEmailExixt(Customer customer)
         {
-            return CustomerRepository.IsEmailExist(customer.EmailAddress);
+            var result = db.Customers.Where(customerdata => customerdata.EmailAddress == customer.EmailAddress).ToList();
+            return result.Count > 0;
+           
         }
 
         public bool IsCustomerSignInExist(SignInInputModel CustomerSignInInput)
         {
-            return CustomerRepository.IsCustomerSignInExist(CustomerSignInInput);
+            var result = db.Customers.Where(customer => customer.EmailAddress == CustomerSignInInput.EmailAddress && customer.Password == CustomerSignInInput.Password).ToList();
+            return result.Count > 0;
+            
         }
         
         public string LoggedInUser(SignInInputModel CustomerSignInInput)

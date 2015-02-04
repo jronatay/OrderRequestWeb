@@ -1,12 +1,12 @@
 ﻿html {
-    background-color: #e2e2e2;
+    background-color: #3498db;
     margin: 0;
     padding: 0;
 }
 
 body {
     background-color: #fff;
-    border-top: solid 10px #000;
+    border-top: solid 10px #2980b9;
     color: #333;
     font-size: .85em;
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
@@ -105,7 +105,7 @@ h5, h6 {
 }
 
     .main-content {
-        background: url("../Images/accent.png") no-repeat;
+       
         padding-left: 10px;
         padding-top: 30px;
     }
@@ -113,23 +113,51 @@ h5, h6 {
     .featured + .main-content {
         background: url("../Images/heroAccent.png") no-repeat;
     }
-
+.header_layout {
+    width: 100%;
+    background: #3498db;
+    overflow: hidden;
+    padding-bottom: 20px;
+}
+.headertitle {
+    color: #3498db;
+}
+.headerp {
+    color: #2c3e50;
+    font-size:1.1em;
+}
+.headerp a {
+    color: #3498db;
+    font-size:1.1em;
+    text-decoration:none;
+}
+.headerp a:hover {
+    background:none;
+    color: #2980b9;
+ 
+}
 header .content-wrapper {
     padding-top: 20px; 
 }
 
 footer {
     clear: both;
-    background-color: #e2e2e2;
+    background-color: #3498db;
     font-size: .8em;
     height: 100px;
 }
-
+.copyright {
+    color:#FFFFFF;
+}
+.center-block {
+    margin: 0 auto;
+    width: 500px;
+}
 
 /* site title
 ----------------------------------------------------------*/
 .site-title {
-    color: #c8c8c8;
+    color: #FFFFFF;
     font-family: Rockwell, Consolas, "Courier New", Courier, monospace;
     font-size: 2.3em;
     margin: 0;
@@ -137,7 +165,7 @@ footer {
 
 .site-title a, .site-title a:hover, .site-title a:active {
     background: none;
-    color: #c8c8c8;
+     color: #FFFFFF;
     outline: none;
     text-decoration: none;
 }
@@ -152,12 +180,16 @@ footer {
     text-align: right;
 }
 
+    #login  span {
+        color:#FFFFFF;
+    }
     #login a {
-        background-color: #d3dce0;
+        background-color: #34495e;
         margin-left: 10px;
         margin-right: 3px;
         padding: 2px 3px;
         text-decoration: none;
+        color:#ffffff;
     }
 
     #login a.username {
@@ -177,6 +209,10 @@ footer {
     }
 
 
+.signin-block {
+    margin: 0 auto;
+    width: 350px;
+}
 /* menu
 ----------------------------------------------------------*/
 ul#menu {
@@ -329,6 +365,8 @@ aside {
 }
 
 /* login page */
+
+
 #loginForm {
     border-right: solid 2px #c8c8c8;
     float: left;
@@ -395,6 +433,13 @@ aside {
 }
 
 /* forms */
+.editor-label label {
+    color: #e74c3c;
+}
+#countryselection {
+    padding: 5px 10px;
+    color:#333333;
+}
 fieldset {
     border: none;
     margin: 0;
@@ -438,6 +483,13 @@ textarea {
     font-family: inherit;
     width: 500px;
 }
+
+    .belize input {
+    background: #2980b9;
+    border: none;
+    color: #FFFFFF;
+
+    }
 
     input:focus, textarea:focus {
         border: 1px solid #7ac0da;
@@ -523,10 +575,93 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+.validation-summary-errors ul li{
+    list-style-type:none;
+}
 
 
 /* tables
 ----------------------------------------------------------*/
+.center {
+    margin:0 auto;
+}
+.center-table {
+    margin:0 auto;
+    background:#ecf0f1;
+}
+.center_table {
+     margin:0 auto;
+}
+
+    .center-table th {
+        padding:5px;
+        text-align:center;
+        color:#2980b9;
+        border-top:2px solid #3498db;
+        border-bottom:2px solid #3498db;
+        background:#FFFFFF;
+        
+    }
+    .center-table tr {
+       border-left:1px solid #2980b9;
+       border-right:1px solid #2980b9;
+
+    }
+     .center-table td {
+        padding:5px;
+        padding-bottom:10px;
+        border-bottom: 1px solid #2980b9;
+
+    }
+    
+.Quantity  {
+    width:50px;
+    text-align:center;
+    color:#c0392b;
+    font-weight:bold;
+}
+.ProductName  {
+    width:150px;
+}
+.Description  {
+    width:300px;
+}
+.center_table tr {
+    border-left:1px solid #2980b9;
+    border-right:1px solid #2980b9;
+}
+.center_table th {
+    padding:5px;
+    text-align:center;
+    color:#2980b9;
+    border-top:2px solid #3498db;
+    border-bottom:2px solid #3498db;
+    background:#FFFFFF;
+}
+.center_table td {
+    width:50px;
+    padding:5px;
+    padding-bottom:10px;
+    border-bottom: 1px solid #2980b9;
+}
+
+.orderno {
+    text-align:center;
+    font-weight:bold;
+    color:#c0392b;
+}
+.alizarincolor_details a {
+    color: #e74c3c;
+    text-decoration: none;
+    cursor: pointer;
+}
+.alizarincolor_details a:hover {
+    color: #c0392b;
+    background:none;
+}
+.prodlist-table input {
+    width:200px;
+}
 table {
     border-collapse: collapse;
     border-spacing: 0;

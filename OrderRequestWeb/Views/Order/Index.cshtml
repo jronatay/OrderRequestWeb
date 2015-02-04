@@ -1,61 +1,27 @@
 ﻿
-@model List<EntityLibrary.OrderModels.OrderProductsInputModel>
-
 
 @{
     ViewBag.Title = "Index";
 }
-<p>Order Over View :  @Html.ActionLink("Order Overview", "OrderOverView")</p>
-<h2>New Order</h2>
+<div class="center">
+<p class="headerp">Order Over View :  @Html.ActionLink("Order Overview", "OrderOverView")</p>
+<h2 class="headertitle">New Order</h2>
+     <div id="selection">
 
-
-   @using (Html.BeginForm("Index", "Order", FormMethod.Post))
-    {
-        @Html.ValidationSummary(true)
-<table>
-    <tr>
-        <th>
-            ProductName
-        </th>
-        <th>
-            Description
-        </th>
-        <th> Quantity</th>
-    </tr>
-  <tbody>
-        @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProductName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                  <input type="hidden" name="Id" value="@item.Id" />
-                  <input type="hidden" name="ProductName" value="@item.ProductName" />
-                  <input type="hidden" name="Description" value="@item.Description" />
-                  <input type="number" step="1" name="Quantity" min="0" />
-                </td>
-            </tr>
-        }
-         <tr><td colspan="3" ><h3><strong>Others</strong></h3></td></tr>
-         <tr>
-                <td>
-                   <input type="text" name="ProductName" pattern="^[^<>!#$%^&*\(\)\+=\[\]\{\}/]*$" />
-                </td>
-                <td>
-                    <textarea  name="Description" pattern="^[^<>!#$%^&*\(\)\+=\[\]\{\}/]*$" rows="5" cols="10"></textarea>
-                </td>
-                <td>
-                  <input type="hidden" name="Id" value="0" />
-                    <input type="number" step="1" name="Quantity" min="0"/>
-                </td>
-            </tr>
-      </tbody>
-         <tr><td><input type="submit" value="Order" /></td></tr>
-         
-    
-
-</table>
-    }
+    </div>
+    <div id="table-block">
+  
+ </div>
+   
+</div>
+<script>
+    $(function () {
+          
+        $.get("/Order/GetList", function (data) {
+            $("#table-block").append(data);
+        });
+        $.get("/Order/getproducts", function (data) {
+            $("#selection").html(data);
+        });
+    });
+</script>
