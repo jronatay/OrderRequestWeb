@@ -39,7 +39,7 @@
                 success: function (responseText, status) {
                     $("#table-rows").append("<tr ><td>" + responseText.ProductName + "</td>" +
                                             "<td>" + responseText.Description + "</td>" +
-                                            "<td><input type='number' name='Quantity' min=1 step=1 required>" +
+                                            "<td><input type='number' class='Quantityinput' name='Quantity' min=1 step=1 required>" +
                                             "<input type='hidden' name='Id' value='" + responseText.Id + "'>" +
                                             "<input type='hidden' name='ProductName' value='" + responseText.ProductName + "'>" +
                                             "<input type='hidden' name='Description' value='" + responseText.Description + "'></td>" +
@@ -51,7 +51,7 @@
             $("#table-rows").append("<tr ><td><input type='text' name='ProductName' placeholder='Product Name' required></td>" +
 
                                            "<td><textarea name='Description' row='5' placeholder='Product Description' required></textarea></td>" +
-                                           "<td><input type='number' name='Quantity' min=1 step=1 required>" +
+                                           "<td><input type='number' class='Quantityinput' name='Quantity' min=1 step=1 required>" +
                                            "<input type='hidden' name='Id' value='0'>" +
                                            "<td><input type='button' value='Remove'></td></tr>");
         }

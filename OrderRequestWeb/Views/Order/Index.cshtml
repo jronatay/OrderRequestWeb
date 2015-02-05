@@ -10,7 +10,14 @@
 
     </div>
     <div id="table-block">
-  
+    @using (Html.BeginForm("Index", "Order", FormMethod.Post))
+    {
+      @Html.ValidationSummary(true)
+        <table id="productlist" >
+        </table>
+        <input type="submit" value="Submit Order" />
+
+    }
  </div>
    
 </div>
@@ -18,7 +25,7 @@
     $(function () {
           
         $.get("/Order/GetList", function (data) {
-            $("#table-block").append(data);
+            $("#productlist").append(data);
         });
         $.get("/Order/getproducts", function (data) {
             $("#selection").html(data);

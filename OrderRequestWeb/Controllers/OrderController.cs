@@ -14,12 +14,13 @@ namespace OrderRequestWeb.Controllers
     public class OrderController : Controller
     {
         private BusinessLogicLayer.OrderService OrderService = new OrderService();
+        private EntityLibrary.OrderDAO OrderRepository = new OrderDAO();
         //
         // GET: /Order/
         
         public ActionResult Index()
         {
-            Session["model"] =" ";
+            Session["model"] =null;
             return View();
         }
 
@@ -29,7 +30,7 @@ namespace OrderRequestWeb.Controllers
             if (ModelState.IsValid)
             {
                 
-                if (OrderService.IsRequestedStoredInTemporaryStorage(OrderService.PopulatedOrderProductFromRequest(model)))
+                if (OrderService.Is_Requested_Stored_In_Temporary_Storage(OrderService.Populated_Order_Product_From_Request(model)))
                 {
                     
                     Session["model"] = model;
@@ -47,16 +48,16 @@ namespace OrderRequestWeb.Controllers
 
         public ActionResult OrderCheck()
         {
-            if (Session["model"] !=null)
+            if (Session["model"] !=null )
             {
-                return View(OrderService.ReturnOrderProductsStored(OrderService.PopulatedOrderProductFromRequest((EntityLibrary.OrderModels.OrderRequestInputModel)Session["model"])));
+                return View(OrderService.ReturnOrderProductsStored(OrderService.Populated_Order_Product_From_Request((EntityLibrary.OrderModels.OrderRequestInputModel)Session["model"])));
             }
             return RedirectToAction("Index");
         }
 
         public ActionResult OrderConfirmation()
         {
-            int OrderNo=OrderService.NewOrder(int.Parse(User.Identity.Name.Split(',')[1]));
+            int OrderNo = OrderService.New_Order_Id_and_update_order_number(int.Parse(User.Identity.Name.Split(',')[1]));
             OrderService.SaveOrder((EntityLibrary.OrderModels.OrderRequestInputModel)Session["model"], OrderNo);
             return View(OrderService.OrderConfirmation(OrderNo));
         }
@@ -67,21 +68,22 @@ namespace OrderRequestWeb.Controllers
             return PartialView();
         }
 
+
         public ActionResult getproducts()
         {
-            return PartialView(OrderService.OrderProductList());
+            return PartialView(OrderRepository.Order_Product_List());
         }
         [HttpPost]
         public JsonResult ProducttoList(string Id)
         {
-            var result = OrderService.getProductData(int.Parse(Id));
+            var result = OrderService.get_and_set_product_data(int.Parse(Id));
             return Json(result);
         }
 
        
         public ActionResult OrderOverView()
         {
-            return View(OrderService.GetOrderByCustomerID(int.Parse(User.Identity.Name.Split(',')[1])));
+            return View(OrderService.Get_Order_By_Customer_ID(int.Parse(User.Identity.Name.Split(',')[1])));
         }
         
         public ActionResult OrderOverViewDetails(int id)

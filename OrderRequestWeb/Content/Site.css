@@ -659,11 +659,14 @@ input[type="checkbox"].input-validation-error {
     color: #c0392b;
     background:none;
 }
-.prodlist-table input{
+.prodlist-table input[type="text"]{
     width:200px;
 }
 .prodlist-table input[type="button"]{
     width:100px;
+}
+.Quantityinput{
+    width:50px;
 }
 .prodlist-table textarea{
     width:250px;

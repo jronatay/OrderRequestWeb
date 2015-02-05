@@ -12,27 +12,28 @@ namespace BusinessLogicLayer
     public class OrderService
     {
         private OrderRequestEntities db = new OrderRequestEntities();
-        private EntityLibrary.OrderDAO OrderRepository = new OrderDAO();
-       
+        private EntityLibrary.OrderDAO OrderDAO = new OrderDAO();
+        private OrderProduct OrderProduct = new OrderProduct();
         private EntityLibrary.Order Order = new EntityLibrary.Order();
         private EntityLibrary.OrderItem OrderItem = new OrderItem();
         private EntityLibrary.OrderModels.OrderProductsInputModel OrderProductInputModel = new EntityLibrary.OrderModels.OrderProductsInputModel();
         
         
         
-        public IEnumerable<OrderProduct> OrderProductList()
+        public IEnumerable<OrderProduct> Order_Product_List()
         {
-            return OrderRepository.OrderProductList();
+            return OrderDAO.Order_Product_List();
         }
 
-        public object getProductData(int Id)
+        public object get_and_set_product_data(int Id)
         {
-            OrderProductInputModel = getOrderProduct(Id);
+            OrderProductInputModel = get_order_product_and_populate_input_model(Id);
             return new { Id=OrderProductInputModel.Id,
                          ProductName=OrderProductInputModel.ProductName,
                          Description = OrderProductInputModel.Description};
         }
-        public EntityLibrary.OrderModels.OrderProductsInputModel getOrderProduct(int Id)
+
+        public EntityLibrary.OrderModels.OrderProductsInputModel get_order_product_and_populate_input_model(int Id)
         {
             var result = db.OrderProducts.Where(product => product.Id == Id).First();
 
@@ -41,37 +42,10 @@ namespace BusinessLogicLayer
             OrderProductInputModel.Description = result.Description;
             return OrderProductInputModel;
         }
-       
-        public List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductInputList()
-        {
-            return PopulateOrderProductInputModel(OrderRepository.OrderProductList());
-        }
 
-        public List<EntityLibrary.OrderModels.OrderProductsInputModel> PopulateOrderProductInputModel(List<OrderProduct> OrderProducts)
+        public List<EntityLibrary.OrderModels.OrderProductsInputModel> Populated_Order_Product_From_Request(EntityLibrary.OrderModels.OrderRequestInputModel OrderInputRequest)
         {
-
-            List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderInputs = new List<EntityLibrary.OrderModels.OrderProductsInputModel>();
-            OrderProducts = OrderRepository.OrderProductList();
-            foreach (var OrderProductsItem in OrderProducts)
-            {
-                EntityLibrary.OrderModels.OrderProductsInputModel OrderProductInput = new EntityLibrary.OrderModels.OrderProductsInputModel();
-                OrderProductInput.Id = OrderProductsItem.Id;
-                OrderProductInput.ProductName = OrderProductsItem.ProductName;
-                OrderProductInput.Description = OrderProductsItem.Description;
-                OrderProductInput.Quantity = 0;
-                OrderInputs.Add(OrderProductInput);
-            }
-            return OrderInputs;
-        }
-
-        public List<EntityLibrary.OrderModels.OrderProductsInputModel> PopulatedOrderProductFromRequest(EntityLibrary.OrderModels.OrderRequestInputModel OrderRequestModel)
-        {
-            return PopulateModelFromRequest(OrderRequestModel);
-        }
-
-        public List<EntityLibrary.OrderModels.OrderProductsInputModel> PopulateModelFromRequest(EntityLibrary.OrderModels.OrderRequestInputModel OrderInputRequest)
-        {
-            List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderInput = new List<EntityLibrary.OrderModels.OrderProductsInputModel>();
+           List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderInput = new List<EntityLibrary.OrderModels.OrderProductsInputModel>();
             if (OrderInputRequest.Id != null)
             {
                 for (int counter = 0; counter < OrderInputRequest.Id.Count(); counter++)
@@ -80,7 +54,7 @@ namespace BusinessLogicLayer
                     if (OrderInputRequest.ProductName[counter] != null && OrderInputRequest.ProductName[counter].Trim() != "" &&
                         OrderInputRequest.Description[counter] != null && OrderInputRequest.Description[counter].Trim() != "")
                     {
-                        EntityLibrary.OrderModels.OrderProductsInputModel OrderProductInputModel = new EntityLibrary.OrderModels.OrderProductsInputModel();
+                        OrderProductInputModel = new EntityLibrary.OrderModels.OrderProductsInputModel();
                         OrderProductInputModel.Id = OrderInputRequest.Id[counter];
                         OrderProductInputModel.ProductName = OrderInputRequest.ProductName[counter];
                         OrderProductInputModel.Description = OrderInputRequest.Description[counter];
@@ -94,7 +68,9 @@ namespace BusinessLogicLayer
             return OrderInput;
         }
 
-        public bool IsThereAtleastOneOrder(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
+       
+
+        public bool Is_There_At_least_One_Order(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
         {
             foreach (var Item in OrderProductsInput)
             {
@@ -108,7 +84,7 @@ namespace BusinessLogicLayer
 
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> ReturnStoredOrderProducts(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
         {
-            if (IsThereAtleastOneOrder(OrderProductsInput))
+            if (Is_There_At_least_One_Order(OrderProductsInput))
             {
                 return StoreProductsOnTemporaryStorage(OrderProductsInput);
             }
@@ -137,23 +113,18 @@ namespace BusinessLogicLayer
             return OrderProductInputModel;
         }
 
-        public bool IsRequestedStoredInTemporaryStorage(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
+        public bool Is_Requested_Stored_In_Temporary_Storage(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
         {
             return ReturnStoredOrderProducts(OrderProductsInput) != null;
         }
 
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> ReturnOrderProductsStored(List<EntityLibrary.OrderModels.OrderProductsInputModel> StoredOrderProducts)
         {
-            if (IsRequestedStoredInTemporaryStorage(StoredOrderProducts))
+            if (Is_Requested_Stored_In_Temporary_Storage(StoredOrderProducts))
             {
                 return ReturnStoredOrderProducts(StoredOrderProducts);
             }
             return null;
-        }
-
-        public bool IsConfirmedOrderRequestNull(EntityLibrary.OrderModels.OrderRequestInputModel ConfirmedOrderRequest)
-        {
-            return ConfirmedOrderRequest == null;
         }
 
         public Order PopulateOrder(int CustomerID)
@@ -163,35 +134,55 @@ namespace BusinessLogicLayer
             return Order;
         }
 
-        public int NewOrder(int CustomerID)
+        public int New_Order_Id_and_update_order_number(int CustomerID)
         {
-            int OrderNo = OrderRepository.AddOrderRequestAndReturnGeneratedID(CustomerID);
-            OrderRepository.UpdateOrderNo(OrderNo);
+            Order.CreationDate = DateTime.Now.ToLocalTime();
+            Order.CustomerId = CustomerID;
+            db.Orders.Add(Order);
+            db.SaveChanges();
+            int OrderNo = Order.Id;
+
+            Update_Order_No(OrderNo);
             return OrderNo;
         }
-
+        public void Update_Order_No(int OrderID)
+        {
+            Order = OrderDAO.GetOrder(OrderID);
+            Order.OrderNo = OrderID;
+            db.SaveChanges();
+        }
         #region OrderItems
+
        
         public void SaveOrder(EntityLibrary.OrderModels.OrderRequestInputModel ConfirmedOrderRequest,int OrderNo)
         {
             List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderInput = new List<EntityLibrary.OrderModels.OrderProductsInputModel>();
-           OrderInput = PopulatedOrderProductFromRequest(ConfirmedOrderRequest);
-            foreach (var Product in OrderInput)
-            {
-                if (Product.Id==0  && Product.Quantity != 0)
+            OrderInput = Populated_Order_Product_From_Request(ConfirmedOrderRequest);
+                foreach (var Product in OrderInput)
                 {
-                    int OrderProductID =OrderRepository.AddOtherProductAndReturnGeneratedID(Product);
-                    OrderRepository.AddOrderItems(AddOrderItemsOtherProducts(Product, OrderNo, OrderProductID));
+                    if (Product.Id==0  && Product.Quantity != 0)
+                    {
+                        int OrderProductID = Add_Other_Product_And_Return_Generated_ID(Product);
+                        OrderDAO.AddOrderItems(Add_Order_Items_Other_Products(Product, OrderNo, OrderProductID));
+                    }
+                    else if (Product.Id != 0 && Product.Quantity != 0)
+                    {
+                        OrderDAO.AddOrderItems(Add_Order_Items(Product, OrderNo));
+                    }
                 }
-                else if (Product.Id != 0 && Product.Quantity != 0)
-                {
-                    OrderRepository.AddOrderItems(AddOrderItems(Product, OrderNo));
-                }
-            }
         }
-       
-        
-         public OrderItem AddOrderItems(EntityLibrary.OrderModels.OrderProductsInputModel OrderProducts,int OrderNo)
+
+        public int Add_Other_Product_And_Return_Generated_ID(EntityLibrary.OrderModels.OrderProductsInputModel OtherRequestProduct)
+        {
+            OrderProduct.ProductName = OtherRequestProduct.ProductName;
+            OrderProduct.Description = OtherRequestProduct.Description;
+            db.OrderProducts.Add(OrderProduct);
+            db.SaveChanges();
+
+            return OrderProduct.Id;
+        }
+      
+         public OrderItem Add_Order_Items(EntityLibrary.OrderModels.OrderProductsInputModel OrderProducts,int OrderNo)
         {
            
             OrderItem.Quantity = OrderProducts.Quantity;
@@ -200,7 +191,7 @@ namespace BusinessLogicLayer
             return OrderItem;
         }
         
-        public OrderItem AddOrderItemsOtherProducts(EntityLibrary.OrderModels.OrderProductsInputModel OrderProducts, int OrderNo,int OrderProductID)
+        public OrderItem Add_Order_Items_Other_Products(EntityLibrary.OrderModels.OrderProductsInputModel OrderProducts, int OrderNo,int OrderProductID)
         {
            
             OrderItem.Quantity = OrderProducts.Quantity;
@@ -211,21 +202,48 @@ namespace BusinessLogicLayer
         
         public Order OrderConfirmation(int OrderNo)
         {
-            return OrderRepository.OrderConfirmation(OrderNo);
+            return OrderDAO.OrderConfirmation(OrderNo);
         }
         
         #endregion
          
-        public List<EntityLibrary.Order> GetOrderByCustomerID(int CustomerId)
+        public List<EntityLibrary.Order> Get_Order_By_Customer_ID(int CustomerId)
         {
-            return OrderRepository.GetOrderByCustomer(CustomerId);
+            return OrderDAO.Get_Order_By_Customer_ID(CustomerId);
         }
 
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> GetOrderProductsByOrderIdAndCustomerId(int OrderId,int CustomerId)
         {
-            return OrderRepository.GetOrderDetails(CustomerId, OrderId);
-        }
+            var result = from o in db.Orders
+                         join oi in db.OrderItems
+                         on o.Id equals oi.OrderId
+                         join op in db.OrderProducts
+                         on oi.OrderProductID equals op.Id
+                         where o.CustomerId == CustomerId && o.Id == OrderId
+                         select new
+                         {
+                             ProductName = op.ProductName,
+                             Description = op.Description,
+                             Quantity = oi.Quantity,
+                             Id = op.Id
 
+
+                         };
+
+            List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsOverView = new List<EntityLibrary.OrderModels.OrderProductsInputModel>();
+            foreach (var Products in result)
+            {
+               OrderProductInputModel = new EntityLibrary.OrderModels.OrderProductsInputModel();
+                OrderProductInputModel.Id = Products.Id;
+                OrderProductInputModel.ProductName = Products.ProductName;
+                OrderProductInputModel.Description = Products.Description;
+                OrderProductInputModel.Quantity = Products.Quantity;
+                OrderProductsOverView.Add(OrderProductInputModel);
+            }
+            return OrderProductsOverView;
+
+        }
+       
 
     }
 }
