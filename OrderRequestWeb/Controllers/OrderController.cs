@@ -35,18 +35,17 @@ namespace OrderRequestWeb.Controllers
                     ModelState.AddModelError("", "Put valid info on product name or Description!");
                     return View();
                 }
-
-                if (OrderService.Is_Requested_Stored_In_Temporary_Storage(OrderService.Populated_Order_Product_From_Request(model)))
-                {
-                     Session["model"] = model;
-                    return RedirectToAction("OrderCheck");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "At least 1 Quantity  of product/products needed to process an order");
-                    return View();
-                }
-               
+                else if (OrderService.Is_Requested_Stored_In_Temporary_Storage(OrderService.Populated_Order_Product_From_Request(model)))
+                    {
+                        Session["model"] = model;
+                        return RedirectToAction("OrderCheck");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "At least 1 Quantity  of product/products needed to process an order");
+                        return View();
+                    }
+                
             }
             ModelState.AddModelError("", "Plesase Enter a valid quantity!");
             return View();

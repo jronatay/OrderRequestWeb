@@ -76,7 +76,20 @@ namespace BusinessLogicLayer
             return result.Count > 0;
             
         }
-        
+
+        public bool Is_Customer_Sign_Input_Valid(SignInInputModel CustomerSignInInput)
+        {
+            string passwordPattern = @"^[^\s^<>]*$";
+            string emailPattern = @"[\w-]+@([\w-]+\.)+[\w-]+";
+            Regex passwordRegex = new Regex(passwordPattern);
+            Regex emailRegex = new Regex(emailPattern);
+            if (emailRegex.IsMatch(CustomerSignInInput.EmailAddress) && passwordRegex.IsMatch(CustomerSignInInput.Password))
+            {
+                return true;
+            }
+            return false;
+
+        }
         public string LoggedInUser(SignInInputModel CustomerSignInInput)
         {
             Customer customer = CustomerRepository.CustomerLoggingIn(CustomerSignInInput);

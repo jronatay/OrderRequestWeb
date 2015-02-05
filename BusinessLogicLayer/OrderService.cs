@@ -80,15 +80,23 @@ namespace BusinessLogicLayer
             }
             return false;
         }
+        
         public bool Is_Other_Product_Data_Valid(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
         {
             string Product_Name_and_Description_pattern = @"^[^`~!@#\$%\^&\*\(\)_\+=<>\?;:'\|/\[\]\{\}""]+[^`~!@#\$%\^&\*\(\)_\+=<>\?;:\|/\[\]\{\}""]$";
             Regex Product_Name_and_Description_regex = new Regex(Product_Name_and_Description_pattern);
             foreach (var Item in OrderProductsInput)
             {
-                if (!Product_Name_and_Description_regex.IsMatch(Item.ProductName) && !Product_Name_and_Description_regex.IsMatch(Item.Description))
+                if (Item.Id == 0)
                 {
-                    return false;
+                    if (Item.ProductName.Length > 50)
+                    {
+                        return false;
+                    }
+                    if (!Product_Name_and_Description_regex.IsMatch(Item.ProductName) || !Product_Name_and_Description_regex.IsMatch(Item.Description) )
+                    {
+                        return false;
+                    }
                 }
             }
             return true;
@@ -164,6 +172,7 @@ namespace BusinessLogicLayer
             Order.OrderNo = OrderID;
             db.SaveChanges();
         }
+       
         #region OrderItems
 
        
@@ -220,12 +229,7 @@ namespace BusinessLogicLayer
         
         #endregion
          
-        public List<EntityLibrary.Order> Get_Order_By_Customer_ID(int CustomerId)
-        {
-            return OrderDAO.Get_Order_By_Customer_ID(CustomerId);
-        }
-
-        public List<EntityLibrary.OrderModels.OrderProductsInputModel> GetOrderProductsByOrderIdAndCustomerId(int OrderId,int CustomerId)
+       public List<EntityLibrary.OrderModels.OrderProductsInputModel> GetOrderProductsByOrderIdAndCustomerId(int OrderId,int CustomerId)
         {
             var result = from o in db.Orders
                          join oi in db.OrderItems

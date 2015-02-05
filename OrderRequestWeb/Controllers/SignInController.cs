@@ -37,26 +37,26 @@ namespace OrderRequestWeb.Controllers
         }
          [HttpPost]
          [AllowAnonymous]
-         [ValidateAntiForgeryToken]
+         [ValidateInput(false)]
          public ActionResult Index(EntityLibrary.CustomerModels.SignInInputModel user)
          {
-             try
-             {
-                 if (ModelState.IsValid && CustomerService.IsCustomerSignInExist(user))
-                 {
+            
+            if (!CustomerService.Is_Customer_Sign_Input_Valid(user))
+            {
+            ModelState.AddModelError("", "Ooops.... Please put valid input  ");
+            return View(user);
+            }
+            if (ModelState.IsValid && CustomerService.IsCustomerSignInExist(user))
+            {
 
-                     FormsAuthentication.SetAuthCookie(CustomerService.LoggedInUser(user), false);
-                     return RedirectToAction("Index", "Order");
+                FormsAuthentication.SetAuthCookie(CustomerService.LoggedInUser(user), false);
+                return RedirectToAction("Index", "Order");
 
-                 }
-                 ModelState.AddModelError("", "Email and Password Does not Match ! ");
-                 return View(user);
-             }
-             catch
-             {
-                 ModelState.AddModelError("", "Email and Password Does not Match ! ");
-                 return View(user);
-             }
+            }
+            ModelState.AddModelError("", "Email and Password Does not Match ! ");
+            return View(user);
+             
+            
          }
          [Authorize]
          public ActionResult signout()
