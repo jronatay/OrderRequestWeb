@@ -3,6 +3,5 @@ C:\Users\Justine\Documents\Visual Studio 2012\Projects\OrderRequestWeb\EntityLib
 C:\Users\Justine\Documents\Visual Studio 2012\Projects\OrderRequestWeb\EntityLibrary\bin\Debug\EntityLibrary.pdb
 C:\Users\Justine\Documents\Visual Studio 2012\Projects\OrderRequestWeb\EntityLibrary\bin\Debug\EntityFramework.dll
 C:\Users\Justine\Documents\Visual Studio 2012\Projects\OrderRequestWeb\EntityLibrary\bin\Debug\EntityFramework.xml
-C:\Users\Justine\Documents\Visual Studio 2012\Projects\OrderRequestWeb\EntityLibrary\obj\Debug\EntityLibrary.csprojResolveAssemblyReference.cache
 C:\Users\Justine\Documents\Visual Studio 2012\Projects\OrderRequestWeb\EntityLibrary\obj\Debug\EntityLibrary.dll
 C:\Users\Justine\Documents\Visual Studio 2012\Projects\OrderRequestWeb\EntityLibrary\obj\Debug\EntityLibrary.pdb

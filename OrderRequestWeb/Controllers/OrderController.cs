@@ -14,7 +14,7 @@ namespace OrderRequestWeb.Controllers
     public class OrderController : Controller
     {
         private BusinessLogicLayer.OrderService OrderService = new OrderService();
-        private EntityLibrary.OrderDAO OrderRepository = new OrderDAO();
+        private EntityLibrary.OrderDAO OrderDAO = new OrderDAO();
         //
         // GET: /Order/
         
@@ -25,15 +25,20 @@ namespace OrderRequestWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Index(EntityLibrary.OrderModels.OrderRequestInputModel model)
         {
             if (ModelState.IsValid)
             {
-                
+                if (!OrderService.Is_Other_Product_Data_Valid(OrderService.Populated_Order_Product_From_Request(model)))
+                {
+                    ModelState.AddModelError("", "Put valid info on product name or Description!");
+                    return View();
+                }
+
                 if (OrderService.Is_Requested_Stored_In_Temporary_Storage(OrderService.Populated_Order_Product_From_Request(model)))
                 {
-                    
-                    Session["model"] = model;
+                     Session["model"] = model;
                     return RedirectToAction("OrderCheck");
                 }
                 else
@@ -41,6 +46,7 @@ namespace OrderRequestWeb.Controllers
                     ModelState.AddModelError("", "At least 1 Quantity  of product/products needed to process an order");
                     return View();
                 }
+               
             }
             ModelState.AddModelError("", "Plesase Enter a valid quantity!");
             return View();
@@ -64,14 +70,14 @@ namespace OrderRequestWeb.Controllers
 
         public ActionResult GetList()
         {
-            Session["productrequest"]="";
+            
             return PartialView();
         }
 
 
         public ActionResult getproducts()
         {
-            return PartialView(OrderRepository.Order_Product_List());
+            return PartialView(OrderDAO.Order_Product_List());
         }
         [HttpPost]
         public JsonResult ProducttoList(string Id)
@@ -83,7 +89,7 @@ namespace OrderRequestWeb.Controllers
        
         public ActionResult OrderOverView()
         {
-            return View(OrderService.Get_Order_By_Customer_ID(int.Parse(User.Identity.Name.Split(',')[1])));
+            return View(OrderDAO.Get_Order_By_Customer_ID(int.Parse(User.Identity.Name.Split(',')[1])));
         }
         
         public ActionResult OrderOverViewDetails(int id)

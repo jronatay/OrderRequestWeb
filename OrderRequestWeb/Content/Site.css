@@ -591,6 +591,8 @@ input[type="checkbox"].input-validation-error {
 }
 .center_table {
      margin:0 auto;
+       border-left:1px solid #2980b9;
+       border-right:1px solid #2980b9;
 }
 
     .center-table th {
@@ -603,14 +605,14 @@ input[type="checkbox"].input-validation-error {
         
     }
     .center-table tr {
-       border-left:1px solid #2980b9;
-       border-right:1px solid #2980b9;
+     
 
     }
      .center-table td {
         padding:5px;
         padding-bottom:10px;
         border-bottom: 1px solid #2980b9;
+        
 
     }
     
@@ -639,17 +641,29 @@ input[type="checkbox"].input-validation-error {
     background:#FFFFFF;
 }
 .center_table td {
-    width:50px;
+    
     padding:5px;
     padding-bottom:10px;
     border-bottom: 1px solid #2980b9;
+    text-align:center;
+    
+   
 }
+
 
 .orderno {
     text-align:center;
     font-weight:bold;
     color:#c0392b;
 }
+#table-rows .none {
+   text-align:center;
+    color:#c0392b;
+    font-weight:bold;
+    width:600px;
+    
+}
+
 .alizarincolor_details a {
     color: #e74c3c;
     text-decoration: none;
@@ -658,6 +672,9 @@ input[type="checkbox"].input-validation-error {
 .alizarincolor_details a:hover {
     color: #c0392b;
     background:none;
+}
+.prodlist-table td {
+    text-align:center;
 }
 .prodlist-table input[type="text"]{
     width:200px;
@@ -669,7 +686,7 @@ input[type="checkbox"].input-validation-error {
     width:50px;
 }
 .prodlist-table textarea{
-    width:250px;
+    width:300px;
 }
 table {
     border-collapse: collapse;

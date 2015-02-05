@@ -13,7 +13,7 @@
     @using (Html.BeginForm("Index", "Order", FormMethod.Post))
     {
       @Html.ValidationSummary(true)
-        <table id="productlist" >
+        <table id="productlist" class="center_table" >
         </table>
         <input type="submit" value="Submit Order" />
 
@@ -21,14 +21,28 @@
  </div>
    
 </div>
+<script src="~/Scripts/json2.js"></script>
 <script>
     $(function () {
           
         $.get("/Order/GetList", function (data) {
             $("#productlist").append(data);
+            checktable();
         });
         $.get("/Order/getproducts", function (data) {
             $("#selection").html(data);
         });
+        
     });
+    function checktable() {
+        var rowCount = $('#table-rows tr').length;
+        if (rowCount == 0)
+        {
+            $("#table-rows").append("<tr id='noprod' ><td colspan=4 class='none'  >No Product Added to list</td></tr>");
+        }
+        else
+        {
+            $("#noprod").remove();
+        }
+    }
 </script>

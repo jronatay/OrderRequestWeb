@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using EntityLibrary;
+using System.Text.RegularExpressions;
 
 
 namespace BusinessLogicLayer
@@ -68,8 +69,6 @@ namespace BusinessLogicLayer
             return OrderInput;
         }
 
-       
-
         public bool Is_There_At_least_One_Order(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
         {
             foreach (var Item in OrderProductsInput)
@@ -81,10 +80,23 @@ namespace BusinessLogicLayer
             }
             return false;
         }
+        public bool Is_Other_Product_Data_Valid(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
+        {
+            string Product_Name_and_Description_pattern = @"^[^`~!@#\$%\^&\*\(\)_\+=<>\?;:'\|/\[\]\{\}""]+[^`~!@#\$%\^&\*\(\)_\+=<>\?;:\|/\[\]\{\}""]$";
+            Regex Product_Name_and_Description_regex = new Regex(Product_Name_and_Description_pattern);
+            foreach (var Item in OrderProductsInput)
+            {
+                if (!Product_Name_and_Description_regex.IsMatch(Item.ProductName) && !Product_Name_and_Description_regex.IsMatch(Item.Description))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> ReturnStoredOrderProducts(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
         {
-            if (Is_There_At_least_One_Order(OrderProductsInput))
+            if (Is_There_At_least_One_Order(OrderProductsInput) )
             {
                 return StoreProductsOnTemporaryStorage(OrderProductsInput);
             }
@@ -145,6 +157,7 @@ namespace BusinessLogicLayer
             Update_Order_No(OrderNo);
             return OrderNo;
         }
+        
         public void Update_Order_No(int OrderID)
         {
             Order = OrderDAO.GetOrder(OrderID);
@@ -182,7 +195,7 @@ namespace BusinessLogicLayer
             return OrderProduct.Id;
         }
       
-         public OrderItem Add_Order_Items(EntityLibrary.OrderModels.OrderProductsInputModel OrderProducts,int OrderNo)
+        public OrderItem Add_Order_Items(EntityLibrary.OrderModels.OrderProductsInputModel OrderProducts,int OrderNo)
         {
            
             OrderItem.Quantity = OrderProducts.Quantity;
