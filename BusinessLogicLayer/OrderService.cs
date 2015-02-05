@@ -108,7 +108,7 @@ namespace BusinessLogicLayer
             {
                 return StoreProductsOnTemporaryStorage(OrderProductsInput);
             }
-            return null;
+            throw  new Exception();
         }
 
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> StoreProductsOnTemporaryStorage(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsRequestedInput)

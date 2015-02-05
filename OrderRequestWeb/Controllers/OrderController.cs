@@ -28,14 +28,16 @@ namespace OrderRequestWeb.Controllers
         [ValidateInput(false)]
         public ActionResult Index(EntityLibrary.OrderModels.OrderRequestInputModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                if (!OrderService.Is_Other_Product_Data_Valid(OrderService.Populated_Order_Product_From_Request(model)))
+                if (ModelState.IsValid)
                 {
-                    ModelState.AddModelError("", "Put valid info on product name or Description!");
-                    return View();
-                }
-                else if (OrderService.Is_Requested_Stored_In_Temporary_Storage(OrderService.Populated_Order_Product_From_Request(model)))
+                    if (!OrderService.Is_Other_Product_Data_Valid(OrderService.Populated_Order_Product_From_Request(model)))
+                    {
+                        ModelState.AddModelError("", "Put valid info on product name or Description!");
+                        return View();
+                    }
+                    else if (OrderService.Is_Requested_Stored_In_Temporary_Storage(OrderService.Populated_Order_Product_From_Request(model)))
                     {
                         Session["model"] = model;
                         return RedirectToAction("OrderCheck");
@@ -45,10 +47,16 @@ namespace OrderRequestWeb.Controllers
                         ModelState.AddModelError("", "At least 1 Quantity  of product/products needed to process an order");
                         return View();
                     }
-                
+
+                }
+                ModelState.AddModelError("", "Plesase Enter a valid quantity!");
+                return View();
             }
-            ModelState.AddModelError("", "Plesase Enter a valid quantity!");
-            return View();
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", "At least 1 Quantity  of product/products needed to process an order");
+                return View();
+            }
         }
 
         public ActionResult OrderCheck()
