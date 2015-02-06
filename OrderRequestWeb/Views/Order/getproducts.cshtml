@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<EntityLibrary.OrderProduct>
 
 @using (Html.BeginForm("ProducttoList", "Order", FormMethod.Post, new { id = "productselectform" }))
-{
+{<p>Select Product :
     <select name="Id" id="countryselection">
  
     @foreach (var item in Model)
@@ -15,6 +15,7 @@
     
   
     <input type="submit" value="Add to request" />
+    </p>
 }
 
 <script>
