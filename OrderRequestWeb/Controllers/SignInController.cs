@@ -26,6 +26,7 @@ namespace OrderRequestWeb.Controllers
         {
             if (Request.IsAuthenticated)
             {
+                Session["model"] = null;
                 return RedirectToAction("Index", "Order");
             }
             else

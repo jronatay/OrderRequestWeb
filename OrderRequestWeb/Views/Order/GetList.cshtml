@@ -9,7 +9,34 @@
         </tr>
     </thead>
         <tbody id="table-rows" class="prodlist-table">
-
+            @if ((EntityLibrary.OrderModels.OrderRequestInputModel)Session["model"] != null)
+            {
+                 EntityLibrary.OrderModels.OrderRequestInputModel inputmodel = (EntityLibrary.OrderModels.OrderRequestInputModel)Session["model"];
+                 for (int index = 0; index < inputmodel.Id.Count(); index++)
+                 {
+                     if (inputmodel.Id[index] == 0)
+                     {
+                       <tr>
+                        <td class="ProductName"><input type="text" name="ProductName" value="@inputmodel.ProductName[index]" required></td>
+                        <td  class="Description"><textarea name="Description" row="5" required>@inputmodel.Description[index]</textarea></td>
+                        <td class="Quantity"><input type="number" class="Quantityinput" name="Quantity" min=1 step=1 value="@inputmodel.Quantity[index]" required> 
+                        <input type="hidden" name="Id" value="0">
+                        <td><input type="button" value="Remove"></td>
+                        </tr>
+                     }else
+                     {
+                        <tr>
+                        <td class="ProductName">@inputmodel.ProductName[index]</td>
+                        <td  class="Description">@inputmodel.Description[index]</td>
+                        <td class="Quantity"><input type="number" class="Quantityinput" name="Quantity" min=1 step=1 value="@inputmodel.Quantity[index]" required> 
+                        <input type="hidden" name="Id" value="@inputmodel.Id[index]">
+                        <input type="hidden" name="ProductName" value="@inputmodel.ProductName[index]">
+                        <input type="hidden" name="Description" value="@inputmodel.Description[index]">
+                        <td><input type="button" value="Remove"></td>
+                        </tr>
+                     }
+                 }
+            }
         </tbody>
 
     

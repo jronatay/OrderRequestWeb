@@ -20,7 +20,7 @@ namespace OrderRequestWeb.Controllers
         
         public ActionResult Index()
         {
-            Session["model"] =null;
+           
             return View();
         }
 
@@ -44,6 +44,7 @@ namespace OrderRequestWeb.Controllers
                     }
                     else
                     {
+                        Session["model"] = null;
                         ModelState.AddModelError("", "At least 1 Quantity  of product/products needed to process an order");
                         return View();
                     }
@@ -54,6 +55,7 @@ namespace OrderRequestWeb.Controllers
             }
             catch (Exception e)
             {
+                Session["model"] = null;
                 ModelState.AddModelError("", "At least 1 Quantity  of product/products needed to process an order");
                 return View();
             }
@@ -72,7 +74,8 @@ namespace OrderRequestWeb.Controllers
         {
             int OrderNo = OrderService.New_Order_Id_and_update_order_number(int.Parse(User.Identity.Name.Split(',')[1]));
             OrderService.SaveOrder((EntityLibrary.OrderModels.OrderRequestInputModel)Session["model"], OrderNo);
-            return View(OrderService.OrderConfirmation(OrderNo));
+            Session["model"] = null;
+            return View(OrderDAO.OrderConfirmation(OrderNo));
         }
 
         public ActionResult GetList()

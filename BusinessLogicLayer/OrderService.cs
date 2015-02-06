@@ -21,11 +21,6 @@ namespace BusinessLogicLayer
         
         
         
-        public IEnumerable<OrderProduct> Order_Product_List()
-        {
-            return OrderDAO.Order_Product_List();
-        }
-
         public object get_and_set_product_data(int Id)
         {
             OrderProductInputModel = get_order_product_and_populate_input_model(Id);
@@ -89,7 +84,7 @@ namespace BusinessLogicLayer
             {
                 if (Item.Id == 0)
                 {
-                    if (Item.ProductName.Length > 50)
+                    if (Item.ProductName.Length > 50 || Is_Product_Name_Exist(Item.ProductName))
                     {
                         return false;
                     }
@@ -100,6 +95,13 @@ namespace BusinessLogicLayer
                 }
             }
             return true;
+        }
+        
+        public bool Is_Product_Name_Exist(string ProductName)
+        {
+            var result = db.OrderProducts.Where(order_product => order_product.ProductName == ProductName).ToList();
+
+            return result.Count > 0;
         }
 
         public List<EntityLibrary.OrderModels.OrderProductsInputModel> ReturnStoredOrderProducts(List<EntityLibrary.OrderModels.OrderProductsInputModel> OrderProductsInput)
@@ -147,13 +149,6 @@ namespace BusinessLogicLayer
             return null;
         }
 
-        public Order PopulateOrder(int CustomerID)
-        {
-            Order.CreationDate = DateTime.Now.ToLocalTime();
-            Order.CustomerId = CustomerID;
-            return Order;
-        }
-
         public int New_Order_Id_and_update_order_number(int CustomerID)
         {
             Order.CreationDate = DateTime.Now.ToLocalTime();
@@ -185,11 +180,11 @@ namespace BusinessLogicLayer
                     if (Product.Id==0  && Product.Quantity != 0)
                     {
                         int OrderProductID = Add_Other_Product_And_Return_Generated_ID(Product);
-                        OrderDAO.AddOrderItems(Add_Order_Items_Other_Products(Product, OrderNo, OrderProductID));
+                        OrderDAO.AddOrderItems(Populate_Order_Items_Other_Products(Product, OrderNo, OrderProductID));
                     }
                     else if (Product.Id != 0 && Product.Quantity != 0)
                     {
-                        OrderDAO.AddOrderItems(Add_Order_Items(Product, OrderNo));
+                        OrderDAO.AddOrderItems(Populate_Order_Items(Product, OrderNo));
                     }
                 }
         }
@@ -204,7 +199,7 @@ namespace BusinessLogicLayer
             return OrderProduct.Id;
         }
       
-        public OrderItem Add_Order_Items(EntityLibrary.OrderModels.OrderProductsInputModel OrderProducts,int OrderNo)
+        public OrderItem Populate_Order_Items(EntityLibrary.OrderModels.OrderProductsInputModel OrderProducts,int OrderNo)
         {
            
             OrderItem.Quantity = OrderProducts.Quantity;
@@ -212,8 +207,8 @@ namespace BusinessLogicLayer
             OrderItem.OrderId = OrderNo;
             return OrderItem;
         }
-        
-        public OrderItem Add_Order_Items_Other_Products(EntityLibrary.OrderModels.OrderProductsInputModel OrderProducts, int OrderNo,int OrderProductID)
+
+        public OrderItem Populate_Order_Items_Other_Products(EntityLibrary.OrderModels.OrderProductsInputModel OrderProducts, int OrderNo, int OrderProductID)
         {
            
             OrderItem.Quantity = OrderProducts.Quantity;
