@@ -4,16 +4,16 @@
     ViewBag.Title = "OrderConfirmation";
 }
 
-<h2>Order Confirmation</h2>
+<h2 class="headertitle">Order Confirmation</h2>
 
 <fieldset>
     <legend>Order</legend>
 
     <div class="display-label">
-        Your Order No.
+        <strong>Your Order No.</strong>
     </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.OrderNo)
+        <span class="alizarin">@Html.DisplayFor(model => model.OrderNo)</span>
     </div>
     <div>
         <p>Thank You !</p>

@@ -363,7 +363,10 @@ aside {
 .label {
     font-weight: 700;
 }
-
+.alizarin {
+    color:#e74c3c;
+    font-weight:bold;
+}
 /* login page */
 
 
