@@ -217,10 +217,7 @@ namespace BusinessLogicLayer
             return OrderItem;
         }
         
-        public Order OrderConfirmation(int OrderNo)
-        {
-            return OrderDAO.OrderConfirmation(OrderNo);
-        }
+       
         
         #endregion
          
