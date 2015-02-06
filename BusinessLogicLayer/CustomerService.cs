@@ -83,7 +83,7 @@ namespace BusinessLogicLayer
             string emailPattern = @"[\w-]+@([\w-]+\.)+[\w-]+";
             Regex passwordRegex = new Regex(passwordPattern);
             Regex emailRegex = new Regex(emailPattern);
-            if (emailRegex.IsMatch(CustomerSignInInput.EmailAddress) && passwordRegex.IsMatch(CustomerSignInInput.Password))
+            if (emailRegex.IsMatch(CustomerSignInInput.EmailAddress) && passwordRegex.IsMatch(CustomerSignInInput.Password) && CustomerSignInInput.EmailAddress!=null && CustomerSignInInput.Password !=null)
             {
                 return true;
             }

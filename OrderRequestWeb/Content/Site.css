@@ -211,7 +211,7 @@ footer {
 
 .signin-block {
     margin: 0 auto;
-    width: 350px;
+    width: 340px;
 }
 /* menu
 ----------------------------------------------------------*/
@@ -594,7 +594,8 @@ input[type="checkbox"].input-validation-error {
 }
 .center_table {
      margin:0 auto;
-      
+      border-left:1px solid #2980b9;
+    border-right:1px solid #2980b9;
 }
 .center-table tr {
     border-left:1px solid #2980b9;

@@ -42,14 +42,14 @@ namespace OrderRequestWeb.Controllers
          public ActionResult Index(EntityLibrary.CustomerModels.SignInInputModel user)
          {
             
-            if (!CustomerService.Is_Customer_Sign_Input_Valid(user))
-            {
-            ModelState.AddModelError("", "Ooops.... Please put valid input  ");
-            return View(user);
-            }
+           
             if (ModelState.IsValid && CustomerService.IsCustomerSignInExist(user))
             {
-
+                if (!CustomerService.Is_Customer_Sign_Input_Valid(user))
+                {
+                    ModelState.AddModelError("", "Ooops.... Please put valid input  ");
+                    return View(user);
+                }
                 FormsAuthentication.SetAuthCookie(CustomerService.LoggedInUser(user), false);
                 return RedirectToAction("Index", "Order");
 
